@@ -55,4 +55,4 @@ The project aims to:
 - **当前版本**: <!-- VERSION_PLACEHOLDER -->  
 - **更新日志**:  
   - <!-- VERSION_PLACEHOLDER --> (2025-03-23): 初始化项目主页，添加团队信息和初步进度。  
-- **联系我们**: 通过 GitHub Issues 或邮件 (hezhiying@ustc.edu.cn)  
+- **联系我们**: 通过 GitHub Issues 或邮件 
