@@ -7,7 +7,7 @@ This is the GitHub homepage for the "鹤之影" (hezhiying) project, developed b
 ---
 
 ### 📦 当前版本  
-**<!-- VERSION_PLACEHOLDER -->** | Updated: March 23, 2025
+**v0.1.0** | Updated: 2025-03-22
 
 ---
 
