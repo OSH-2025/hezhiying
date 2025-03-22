@@ -1,12 +1,29 @@
-# [鹤之影(hezhiying)](https://github.com/OSH-2025/hezhiying )
-## [位文康](https://github.com/jianyingzhihe "位文康") [罗嘉宏](https://github.com/ustcljh "罗嘉宏") [崔卓](https://github.com/crosaa "崔卓") [郭彦禛](https://github.com/EricGuoYanzhen "郭彦禛")
+# 鹤之影 (hezhiying)
 
-<h3 align="center">OSH-2025-hezhiying @USTC</h3>
+[![Project Image](./src/fufu.jpg)](./src/fufu.jpg "永世传颂，不休独舞，神爱世人，芙门永存！")
 
-![永世传颂，不休独舞，神爱世人，芙门永存！](./src/fufu.jpg)
+This is the GitHub homepage for the "鹤之影" (hezhiying) project, developed by students from the University of Science and Technology of China (USTC) for the OSH-2025 course. The project focuses on exploring topics related to operating systems, particularly in the context of embedded systems and single-chip microcomputers.
 
-| 阶段 | 任务详情     | 日期    | 进度 | 备注 |
-| ---- | ------------ | ------- | ---- | ---- |
-|  选题   | 开会商量确定研究方向。我们围绕大作业选题展开深入交流，我们首先讨论了选择底层相关的内容，如多处理器系统或文件系统，并提到刚完成的linux 101项目，认为可以在此基础上进行拓展，但有些人更喜欢与AI结合的方向，但我们商讨完认为AI属于应用层，与操作系统关联不大，且担心创新性不足。我们又继续考虑了往年的题目和repo资源，但觉得直接照搬缺乏新意。我们又提出嵌入式方向，认为可以结合之前学过的知识，且与操作系统课程的相关性更强。为了更好地推进项目，我们决定目前先就今天讨论的内容进行调研，周三再次开会讨论。           |    3月16日     |   done   |      |
-| 选题 | 再次开会商讨选题,我们分别提出了关于物联网的细粒度操作系统设计。关于改进starpu功能和使用什么语言进行改进的讨论，发现rust在底层嵌入式应用的实现过程中存在一定的局限性，不能很好的结合其应用特点，且会考虑一些冗余的关于地址安全性的问题考虑，所以用C或者C++实现是最有可能的。最后是关于单片机设计问题，我们想要首先在一个单片机上跑多个程序，然后再在N个单片机上跑N个程序，最后实现在N个单片机上跑多于N个程序。 | 3月19日 | done  |      |
-|      |              |         |      |      |
+---
+
+## Team Members
+
+- [位文康](https://github.com/jianyingzhihe "位文康")
+- [罗嘉宏](https://github.com/ustcljh "罗嘉宏")
+- [崔卓](https://github.com/crosaa "崔卓")
+- [郭彦禛](https://github.com/EricGuoYanzhen "郭彦禛")
+
+---
+
+## Project Progress
+
+| Stage | Task Details | Date | Progress | Notes |
+|-------|--------------|------|----------|-------|
+| Topic Selection | Discussed research direction, considered multi-processor systems, file systems, AI (deemed less relevant), past topics (lacked novelty), and embedded systems (chosen for relevance). Planned further research, next meeting on Wednesday. | March 16 | Done | |
+| Topic Selection | Discussed IoT fine-grained OS design, improving starpu functionality (considered C/C++ over Rust due to limitations), and single-chip microcontroller design: run multiple programs on one chip, then N chips with N programs, finally N chips with >N programs. | March 19 | Done | |
+
+---
+
+## Project Objectives
+
+The project aims to:
