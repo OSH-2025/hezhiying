@@ -1,6 +1,5 @@
-# 鹤之影 (hezhiying)
-
-<h3 align="center">OSH-2025 @USTC</h3>
+<h1 align="center">鹤之影 (hezhiying) @USTC</h1>
+<h3 align="center">OSH-2025-hezhiying @USTC</h3>
 
 This is the GitHub homepage for the "鹤之影" (hezhiying) project, developed by students from the University of Science and Technology of China (USTC) for the OSH-2025 course. The project focuses on exploring topics related to operating systems, particularly in the context of embedded systems and single-chip microcomputers.
 
