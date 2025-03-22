@@ -24,10 +24,10 @@ This is the GitHub homepage for the "鹤之影" (hezhiying) project, developed b
 
 ---
 
-## Group Logo
-
-[![Project Image](./src/fufu.jpg)](./src/fufu.jpg "永世传颂，不休独舞，神爱世人，芙门永存！")
-
 ## Project Objectives
 
 The project aims to:
+
+## Group Logo
+
+[![Project Image](./src/fufu.jpg)](./src/fufu.jpg "永世传颂，不休独舞，神爱世人，芙门永存！")
