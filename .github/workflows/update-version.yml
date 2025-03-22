@@ -1,10 +1,11 @@
 name: Update Version Number
-
+permissions:
+  contents: write
 on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
 jobs:
   update-version:
     runs-on: ubuntu-latest
@@ -17,20 +18,21 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Update version in README.md
+      - name: Update version and date in README.md
         run: |
-          # 计算版本号（例如基于 commit 次数）
+          # 计算版本号（基于 commit 次数）
           COMMIT_COUNT=$(git rev-list --count HEAD)
           VERSION="v0.$COMMIT_COUNT.0"
+          # 更新版本号
           sed -i "s/<!-- VERSION_PLACEHOLDER -->/$VERSION/g" README.md
           # 更新日期
           DATE=$(date '+%Y-%m-%d')
-          sed -i "s/Updated: March 23, 2025/Updated: $DATE/g" README.md
+          sed -i "s/<!-- DATE_PLACEHOLDER -->/$DATE/g" README.md
 
       - name: Commit changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add README.md
-          git commit -m "Update version to $VERSION" || echo "No changes to commit"
+          git commit -m "Update version to $VERSION and date to $DATE" || echo "No changes to commit"
           git push
