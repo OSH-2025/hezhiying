@@ -3,7 +3,7 @@
 
 This is the GitHub homepage for the "鹤之影" (hezhiying) project, developed by students from the University of Science and Technology of China (USTC) for the OSH-2025 course. The project focuses on exploring topics related to operating systems, particularly in the context of embedded systems and single-chip microcomputers.
 
-**版本号 (Version):** <!-- VERSION_PLACEHOLDER --> (Updated: March 23, 2025)
+**版本号 (Version):** v0.1.0 (Updated: 2025-03-22)
 
 ---
 
@@ -52,7 +52,7 @@ The project aims to:
 
 ## 附加信息 (Additional Info)  
 
-- **当前版本**: <!-- VERSION_PLACEHOLDER -->  
+- **当前版本**: v0.1.0  
 - **更新日志**:  
-  - <!-- VERSION_PLACEHOLDER --> (2025-03-23): 初始化项目主页，添加团队信息和初步进度。  
+  - v0.1.0 (2025-03-23): 初始化项目主页，添加团队信息和初步进度。  
 - **联系我们**: 通过 GitHub Issues 或邮件 
