@@ -111,7 +111,7 @@ This structured reference section outlines key features and support details for 
 
 ## 附加信息 (Additional Info)  
 
-- **Current version **: v0.1.1 
+- **Current version**: v0.1.1 
 - **Update Log**:  
   - v0.1.0 (2025-03-22): Initialize the project homepage, add team information and preliminary progress.
   - v0.1.1 (2025-03-23): Preliminary project objectives were determined, and the project requirements and key factors were analyzed in detail
