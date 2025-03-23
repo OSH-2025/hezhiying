@@ -56,7 +56,7 @@
             - Optimize Memory Allocation:Modify `src/base/allocator/partition_allocator/partition_alloc_config.h` , adjust the memory pool size:
                 ```cpp
                 #define PA_THREAD_CACHE_SIZE_KB 128
-                ``
+                ```
 
     - Function Verification and Debugging
 
