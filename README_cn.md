@@ -1,5 +1,5 @@
 # 鹤之影 (hezhiying) @USTC
-[中文](README_zh.md) [英文](README)
+[中文](README_cn.md) [英文](README)
 <h3 align="center">OSH-2025-鹤之影 @中国科学技术大学</h3>
 
 
