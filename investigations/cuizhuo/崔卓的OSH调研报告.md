@@ -15,8 +15,6 @@
 
 # StarPU 详细介绍
 
-## 历史
-
 ### 起源与开发背景
 StarPU 是一个用于异构多核架构的任务编程运行时系统，起步于 2009 年。首篇学术论文《StarPU: A Unified Platform for Task Scheduling on Heterogeneous Multicore Architectures》由 Cédric Augonnet、Samuel Thibault、Raymond Namyst 和 Pierre-André Wacrenier 于 2009 年在 Euro-Par 会议上发表。这篇论文提出了一个高层次的执行模型。
 
