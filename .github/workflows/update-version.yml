@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Update version and date in README.md
+      - name: Update version and date in README_en.md
         run: |
           # 计算版本号（基于 commit 次数）
           COMMIT_COUNT=$(git rev-list --count HEAD)
