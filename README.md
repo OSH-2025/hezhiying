@@ -56,7 +56,41 @@ we shoud do:
   - Conduct unit tests and integration tests on critical code segments to ensure system stability and robustness.
 
 ---
-## some references
+## References
+
+### **[FreeRTOS](https://github.com/FreeRTOS)**
+- **Introduction**: FreeRTOS is a very popular open-source real-time operating system widely used in various embedded systems, including STM32 microcontrollers.
+- **Features**:
+  - Supports task management, semaphores, queues, and more.
+  - Optimized for resource-constrained devices.
+  - Offers extensive documentation and community support.
+  - **STM32 Support**: FreeRTOS officially provides good support for STM32, and the STM32CubeMX tool integrates FreeRTOS configuration options, facilitating rapid development.
+
+### **[Zephyr Project](https://github.com/zephyrproject-rtos/zephyr)**
+- **Introduction**: Zephyr is a scalable small real-time operating system suitable for resource-constrained devices and IoT applications.
+- **Features**:
+  - Supports multiple architectures, including ARM Cortex-M.
+  - Built-in support for various wireless technologies such as Bluetooth and Wi-Fi.
+  - Strong security features and continuous integration testing.
+  - **STM32 Support**: Zephyr provides excellent support for STM32 series microcontrollers, making it suitable for applications requiring complex network functionalities.
+
+### **[ThreadX](https://github.com/RISCV-on-Microsemi-FPGA/ThreadX)**
+- **Introduction**: ThreadX is a commercial RTOS known for its high performance and ease of use.
+- **Features**:
+  - Extremely low interrupt latency and fast task switching.
+  - Includes middleware components such as file systems and USB support.
+  - Provides detailed documentation and technical support.
+  - **STM32 Support**: ThreadX supports the STM32 platform and can be used for free in certain scenarios.
+
+### **[CMSIS-RTOS](https://github.com/ARM-software/CMSIS-FreeRTOS.git)**
+- **Introduction**: CMSIS-RTOS V2 is a standard API provided by ARM to simplify the porting of RTOS across different embedded systems.
+- **Features**:
+  - Standardized APIs make code easier to port.
+  - Supports the latest ARM architectures.
+  - Seamlessly integrates with Keil MDK.
+  - **STM32 Support**: CMSIS-RTOS V2 is designed for ARM architectures and thus naturally supports STM32 series microcontrollers.
+
+This structured reference section outlines key features and support details for each of the mentioned RTOS options, providing clear guidance for selecting the most appropriate system for your STM32-based projects.
 
 ---
 ## Control Options  
