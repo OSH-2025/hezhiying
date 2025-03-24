@@ -15,21 +15,10 @@
 
 # StarPU 详细介绍
 
-## 历史
+我找到其发布时的论文，并简要阅读，发现其功能与我想实现的几乎相同，论文链接：[StarPU: a unified platform for task scheduling on heterogeneous multicore architectures](https://onlinelibrary.wiley.com/doi/10.1002/cpe.1631)
 
 ### 起源与开发背景
 StarPU 是一个用于异构多核架构的任务编程运行时系统，起步于 2009 年。首篇学术论文《StarPU: A Unified Platform for Task Scheduling on Heterogeneous Multicore Architectures》由 Cédric Augonnet、Samuel Thibault、Raymond Namyst 和 Pierre-André Wacrenier 于 2009 年在 Euro-Par 会议上发表。这篇论文提出了一个高层次的执行模型。
-
-### 发展历程
-
-- **2009-2011 年：初步成型**  
-  StarPU 的早期版本专注于支持 CPU 和 GPU，提供基本的任务调度和数据管理功能。2011 年，其扩展论文发表在《Concurrency and Computation: Practice and Experience》期刊上，展示了与 MAGMA 等高性能线性代数库的竞争能力，奠定了其在 HPC 社区的地位。
-
-- **2011-2016 年：功能扩展**  
-  在这一阶段，StarPU 增加了对 OpenCL、MPI的支持，并引入了更多调度策略同时，优化了数据预取、异步执行和内存管理，提升了性能和灵活性。
-
-- **2016 年后：成熟与社区化**  
-  随着版本迭代（如 1.0、1.2、1.3），StarPU 支持了更多硬件（如多 GPU、OpenMP 并行）和数据结构（如 CSR 稀疏矩阵）。项目完全开源，托管于 INRIA 的 GitLab（https://gitlab.inria.fr/starpu/starpu），并有一个 GitHub 镜像（https://github.com/starpu-runtime/starpu）。
 
 ### 开源现状
 StarPU 遵循 LGPL（GNU Lesser General Public License）许可，允许用户自由使用、修改和分发代码。其最新版本（截至 2023 年为 1.4.x）仍在活跃维护，支持现代硬件和编程模型。
