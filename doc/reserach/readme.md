@@ -75,21 +75,33 @@ The main control MCU runs a real-time operating system (RTOS like FreeRTOS or uC
 ---
 
 ## 6.  Implementation Steps 
- ### Hardware Connection : A PCB board was designed to connect all MCUs to the board, significantly increasing communication speed compared to traditional DuPont wires.
- ### Software Design : The main control end initializes RTOS, creates a task scheduler, implements bus communication drivers (like SPI driver), and designs task allocation algorithms. The slave end initializes communication interfaces, listens to commands from the main control, executes assigned tasks, and returns results via shared RAM.
+ ### Hardware Connection : 
+
+A PCB board was designed to connect all MCUs to the board, significantly increasing communication speed compared to traditional DuPont wires.
+ ### Software Design : 
+
+The main control end initializes RTOS, creates a task scheduler, implements bus communication drivers (like SPI driver), and designs task allocation algorithms. The slave end initializes communication interfaces, listens to commands from the main control, executes assigned tasks, and returns results via shared RAM.
 
 ---
 
 ## 7.  Importance Analysis 
- ### Academic Value : This project focuses on multi-process scheduling across multiple chips rather than multi-core within a single chip, aiming to implement a simple library structure on STM32 for easy invocation of multi-process task interfaces.
- ### Technical Significance : The design of MCU clusters breaks through the performance limitations of single chips, enhancing system capabilities through hardware collaboration and software optimization. This method holds potential application value in IoT and edge computing fields.
+ ### Academic Value : 
+
+This project focuses on multi-process scheduling across multiple chips rather than multi-core within a single chip, aiming to implement a simple library structure on STM32 for easy invocation of multi-process task interfaces.
+ ### Technical Significance : 
+
+The design of MCU clusters breaks through the performance limitations of single chips, enhancing system capabilities through hardware collaboration and software optimization. This method holds potential application value in IoT and edge computing fields.
 
 ---
 
-## 8.  Related Work Investigation 
-    - Classic Embedded Operating Systems: FreeRTOS, Zephyr
-    - MCU Cluster Research: StarPU, MPICH on MCU
-    - Previous Project Cases: OSH-2019, VR-fancy-office (OSH-2022)
+## 8.  Related Work Investigation
+### Classic Embedded Operating Systems: 
+FreeRTOS, Zephyr 
+### MCU Cluster Research:
+StarPU, MPICH on MCU 
+### Previous Project Cases:
+OSH-2019, VR-fancy-office (OSH-2022)
+
 ---
 
 ## 9.  Innovative Points of This Project 
