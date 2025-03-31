@@ -50,42 +50,6 @@
 
 
 ---
-## 项目操作事项
-
-
----
-
-## 部分参考文档
-### **[FreeRTOS](https://github.com/FreeRTOS)**
-- 简介: FreeRTOS 是一个非常流行的开源实时操作系统，广泛应用于各种嵌入式系统中，包括STM32微控制器。
-- 特点:
-  - 支持任务管理、信号量、队列等功能。
-  - 对资源受限设备进行了优化。
-  - 提供了丰富的文档和支持社区。
-  - STM32支持: FreeRTOS 官方提供了对 STM32 的良好支持，并且在 STM32CubeMX 工具中集成了 FreeRTOS 配置选项，便于快速开发。
-###  **[Zephyr Project](https://github.com/zephyrproject-rtos/zephyr)**
-- 简介: Zephyr 是一个可扩展的小型实时操作系统，适用于资源受限设备和物联网应用。
-- 特点:
-  - 支持多种架构，包括 ARM Cortex-M。
-  - 内置对蓝牙、Wi-Fi等多种无线技术的支持。
-  - 强大的安全特性和持续集成测试。
-  - STM32支持: Zephyr 对 STM32 系列微控制器提供了良好的支持，适合需要复杂网络功能的应用场景。
-###  **[ThreadX](https://github.com/RISCV-on-Microsemi-FPGA/ThreadX)**
-- 简介: ThreadX 是一个商业RTOS，以其高性能和易用性著称。
-- 特点:
-  - 极低的中断延迟和快速的任务切换。
-  - 包含文件系统、USB支持等多个中间件组件。
-  - 提供详细的文档和技术支持。
-  - STM32支持: ThreadX 支持 STM32 平台，并且在某些情况下可以免费使用。
-###    **[CMSIS-RTOS](https://github.com/ARM-software/CMSIS-FreeRTOS.git)**
-- 简介: CMSIS-RTOS V2是一个由ARM提供的标准API，旨在简化RTOS在不同嵌入式系统的移植。
-- 特点:
-  - 标准化的API使得代码更易于移植。
-  - 支持最新的ARM架构。
-  - 可以与Keil MDK无缝集成。
-  STM32支持: CMSIS-RTOS V2专为ARM架构设计，因此自然支持STM32系列微控制器。
-
----
 ## 控制选项
 
 - **[展开进度表格](#project-progress)** - 查看项目进度详情
