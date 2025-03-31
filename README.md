@@ -1,5 +1,5 @@
 # 鹤之影 (hezhiying) @USTC  
-[中文](README_cn.md) [英文](README)
+[中文](README_cn.md) [英文](README.md)
 
 ---
 
