@@ -1,13 +1,21 @@
 # 鹤之影 (hezhiying) @USTC
 [中文](README_cn.md) [英文](README.md)
 
+## 团队成员
+
+- [位文康](https://github.com/jianyingzhihe)
+- [罗嘉宏](https://github.com/ustcljh)
+- [崔卓](https://github.com/crosaa)
+- [郭彦禛](https://github.com/EricGuoYanzhen)
+
+------
+
 <h3 align="center">OSH-2025-鹤之影 @中国科学技术大学</h3>
 
 
 这是“鹤之影”(hezhiying)项目的GitHub主页，该项目由中国科学技术大学（USTC）的学生为OSH-2025课程开发。项目专注于探索与操作系统相关的主题，特别是在嵌入式系统和单片机的背景下。
 
 <div align="center" markdown="1">
-
 [![GitHub repo forks](https://img.shields.io/github/forks/OSH-2025/hezhiying?style=flat&logo=github&logoColor=whitesmoke&label=Forks)](https://github.com/OSH-2025/hezhiying/network)&#160;
 [![GitHub repo stars](https://img.shields.io/github/stars/OSH-2025/hezhiying?style=flat&logo=github&logoColor=whitesmoke&label=Stars)](https://github.com/OSH-2025/hezhiying/stargazers)&#160;
 [![GitHub repo contributors](https://img.shields.io/github/contributors-anon/OSH-2025/hezhiying?style=flat&logo=github&logoColor=whitesmoke&label=Contributors)](https://github.com/OSH-2025/hezhiying/graphs/contributors)    
@@ -20,15 +28,6 @@
 
 ### 📦 当前版本
 **v0.1.1** | 更新时间: 2025-03-23
-
----
-
-## 团队成员
-
-- [位文康](https://github.com/jianyingzhihe)
-- [罗嘉宏](https://github.com/ustcljh)
-- [崔卓](https://github.com/crosaa)
-- [郭彦禛](https://github.com/EricGuoYanzhen)
 
 ---
 
