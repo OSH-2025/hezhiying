@@ -2,6 +2,13 @@
 
 [中文](investigation_cn.md) | [English](investigation.md)
 
+## Team Members
+
+- [Weikang Wei](https://github.com/jianyingzhihe)
+- [Jiahong Luo](https://github.com/ustcljh)
+- [Zhuo Cui](https://github.com/crosaa)
+- [Yanzhen Guo](https://github.com/EricGuoYanzhen)
+
 ---
 
 ## 1. Research Background
@@ -94,7 +101,7 @@ In this phase, we need to handle shared memory issues between two cores.
 
 ## 3. Feasibility Analysis
 
-[可行性分析中文](feasibility-analysis_cn.md) | [English Version](feasibility-analysis.md)
+[可行性分析中文](../feasibility-analysis/feasibility-analysis_cn.md) | [English Version](../feasibility-analysis/feasibility-analysis.md)
 
 ---
 
