@@ -2,6 +2,13 @@
 
 [中文](investigation_cn.md) | [English](investigation.md)
 
+## 项目成员
+
+- [位文康](https://github.com/jianyingzhihe)
+- [罗嘉宏](https://github.com/ustcljh)
+- [崔卓](https://github.com/crosaa)
+- [郭彦禛](https://github.com/EricGuoYanzhen)
+
 ---
 
 ## 1. 研究背景

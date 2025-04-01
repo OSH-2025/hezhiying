@@ -2,6 +2,13 @@
 
 [中文](investigation_cn.md) | [English](investigation.md)
 
+## Team Members
+
+- [Weikang Wei](https://github.com/jianyingzhihe)
+- [Jiahong Luo](https://github.com/ustcljh)
+- [Zhuo Cui](https://github.com/crosaa)
+- [Yanzhen Guo](https://github.com/EricGuoYanzhen)
+
 ---
 
 ## 1. Research Background
