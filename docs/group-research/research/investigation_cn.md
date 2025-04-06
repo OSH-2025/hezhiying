@@ -101,7 +101,7 @@
 
 ## 3. 可行性分析
 
-[可行性分析中文](feasibility-analysis_cn.md) | [English Version](feasibility-analysis.md)
+[可行性分析中文](../feasibility-analysis/feasibility-analysis_cn.md) | [English Version](../feasibility-analysis/feasibility-analysis.md)
 
 ---
 
