@@ -21,7 +21,7 @@
 StarPU 是一个用于异构多核架构的任务编程运行时系统，起步于 2009 年。首篇学术论文《StarPU: A Unified Platform for Task Scheduling on Heterogeneous Multicore Architectures》由 Cédric Augonnet、Samuel Thibault、Raymond Namyst 和 Pierre-André Wacrenier 于 2009 年在 Euro-Par 会议上发表。这篇论文提出了一个高层次的执行模型。
 
 ### 开源现状
-StarPU 遵循 LGPL（GNU Lesser General Public License）许可，允许用户自由使用、修改和分发代码。其最新版本（截至 2023 年为 1.4.x）仍在活跃维护，支持现代硬件和编程模型。
+StarPU 遵循 LGPL（GNU Lesser General Public License）许可，允许用户自由使用、修改和分发代码。其最新版本仍在活跃维护，支持现代硬件和编程模型。
 
 ## 功能与实现方式
 
