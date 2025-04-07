@@ -16,6 +16,24 @@
 - Microkernel Design:
   - Implement a lightweight kernel providing essential services (scheduling, IPC, memory management) to minimize overhead.
   - User-space services (e.g. drivers, protocols) run as independent threads for modularity.
+```
+// Kernel initialization
+void kernel_init() {
+    scheduler_init();
+    ipc_init();
+    memory_manager_init();
+}
+
+// Example user-space driver thread
+void uart_driver_thread(void* args) {
+    while (1) {
+        if (uart_has_data()) {
+            ipc_send(KERNEL_PID, uart_read());
+        }
+        thread_yield();
+    }
+}
+```
 
 ---
 
