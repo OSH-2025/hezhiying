@@ -16,7 +16,7 @@
 - Microkernel Design:
   - Implement a lightweight kernel providing essential services (scheduling, IPC, memory management) to minimize overhead.
   - User-space services (e.g. drivers, protocols) run as independent threads for modularity.
-```
+```c
 // Kernel initialization
 void kernel_init() {
     scheduler_init();
