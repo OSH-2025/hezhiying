@@ -343,6 +343,120 @@ void test_race_condition() {
 ```
 ---
 
+## 11. Introduction to STM32F103C8T6
+- **Core**: ARM Cortex-M3 core, with a core performance score of 177 and a clock speed of 72 MHz.
+- **Memory**:
+  - RAM (operational memory, the actual storage medium is SRAM) size: 20 KB.
+  - ROM (program memory, the actual storage medium is Flash flash memory) size: 64 KB.
+- **Power Supply**: Voltage range of 2.0 - 3.6 V, standard 3.3 V power supply. Unlike the 5V power supply of the 51 microcontroller, if there is a 5V voltage input, a voltage regulator chip must be added to reduce it to 3.3 V before supplying it to the chip.
+- **Package**: Uses LQFP48 package, with a total of 48 pins.
+
+---
+
+## 12. On-chip Resources and Peripherals of STM32 F103 C8T6
+
+### Peripherals inside the Cortex-M3 Core
+1. **NVIC (Nested Vector Interrupt Controller)**: Used for managing interrupts, such as configuring interrupt priorities.
+2. **SysTick (System Timer)**: Mainly provides timing services for operating systems like FreeRTOS or UCOS. It can also perform similar functions to the `delay` function in non-OS environments.
+
+### Peripherals outside the Cortex-M3 Core
+1. **RCC (Reset and Clock Control)**: Configures system clocks and enables clocks for various modules. Before operating peripherals, RCC must be used to enable their clocks.
+2. **GPIO (General-purpose I/O)**: Can be used for tasks like lighting LEDs or reading buttons, which are basic functionalities of microcontrollers.
+3. **AFIO (Alternate Function I/O)**: Allows redefinition of alternate function ports and configuration of interrupt ports.
+4. **EXTI (External Interrupt)**: Configuring external interrupts allows triggering CPU tasks upon pin level changes.
+5. **TIM (Timers)**: Divided into advanced timers, general-purpose timers, and basic timers. The general-purpose timer is commonly used for tasks such as generating PWM signals.
+6. **ADC (Analog-to-Digital Converter)**: Features a built-in 12-bit ADC converter for direct reading of analog voltages on IO pins.
+7. **DMA (Direct Memory Access)**: Assists the CPU in performing large data transfers.
+8. **USART (Universal Synchronous/Asynchronous Receiver/Transmitter)**: Supports both synchronous and asynchronous modes, with asynchronous mode being more commonly used.
+9. **I2C and SPI (Communication Protocols)**: Built-in controllers for efficient communication without needing to simulate these protocols via GPIO.
+10. **CAN**: Commonly used in automotive communications.
+11. **USB**: Capable of emulating devices like a mouse or USB drive.
+12. **RTC (Real-Time Clock)**: Provides timekeeping functionality down to seconds and supports an external backup battery.
+13. **CRC (Cyclic Redundancy Check)**: Facilitates easier data integrity checking.
+14. **PWR (Power Control)**: Enables low-power modes like sleep mode.
+15. **BKP (Backup Registers)**: Retains data even during power loss when backed by a battery.
+16. **IWDG/WWDG (Independent Window Watchdog)**: Ensures system stability by resetting the chip under certain conditions.
+17. **DAC (Digital-to-Analog Converter)**: Outputs analog voltages directly from IO pins.
+18. **SDIO (Secure Digital Input Output)**: For reading SD cards.
+19. **FSMC (Flexible Static Memory Controller)**: Extends memory or configures other bus protocols.
+20. **USB OTG (On-The-Go)**: Allows STM32 to act as a USB host.
+
+> **Note**: Not all models have all peripherals; for example, STM32F103C8T6 lacks SDIO, FSMC, USB OTG, and DAC.
+
+---
+
+## 13. Naming Rules and System Architecture of STM32 F103 C8T6
+
+### Naming Rules
+- **STM32**: Represents a 32-bit microcontroller based on an ARM core.
+- **F**: General type.
+- **103**: Enhanced type.
+- **C**: 48 pins.
+- **8**: 64 KB Flash.
+- **T**: LQFP packaging.
+- **6**: Temperature range of -40 to 85 degrees Celsius.
+
+### System Architecture
+The system architecture is divided into four parts:
+1. **Upper Left Corner**: Cortex-M3 core, connected to three buses leading to Flash memory and other peripherals.
+2. **Lower Left Corner**: DMA (Direct Memory Access), handling simple repetitive data transfer tasks.
+3. **Lower Right Corner**: Peripheral types and distribution.
+4. **Middle Section**: Includes various buses and bridges connecting the core to peripherals.
+
+---
+
+## 14. System Architecture of STM32F103C8T6
+
+### Overall Structure Division
+1. **Upper Left Corner**: Cortex-M3 core.
+   - **ICode Bus**: Loads program instructions, connected to Flash memory.
+   - **DCode Bus**: Loads data, such as constants and debugging parameters.
+   - **System Bus**: Connects to RAM, FMC, etc.
+2. **Lower Left Corner**: DMA (Direct Memory Access).
+3. **Lower Right Corner**: Peripheral types and distribution.
+4. **Middle Section**: Various buses and bridges connecting the core to peripherals.
+
+### Bus System
+1. **AHB (Advanced High-performance Bus)**: Connects primary peripherals.
+2. **Two Bridges**: Connecting APB2 and APB1 peripheral buses.
+3. **APB2 (Advanced Peripheral Bus 2)**: Higher performance, typically at 72 MHz, connects important peripherals like GPIO ports, USART, SPI, TIM, ADC, EXTI, AFIO, etc.
+4. **APB1 (Advanced Peripheral Bus 1)**: Lower performance, typically at 36 MHz, connects less critical peripherals like DAC, PWR, BKP, etc.
+
+---
+
+## 15. Pin Definition and Boot Configuration of STM32 F103 C8T6
+
+### Pin Definitions
+- **Power-related Pins**: Including VBAT (backup battery supply pin), VSS (ground), VDD (3.3V power supply).
+- **Minimum System-related Pins**: Including reset pin NIST (active low reset).
+- **I/O Functional Pins**: Multiple pins can serve as I/O, intrusion detection, or RTC pins.
+- **Boot Configuration Pins**: BOOT0 and BOOT1, used for selecting boot modes.
+
+### Boot Configuration
+Configuring BOOT0 and BOOT1 pins selects the boot mode:
+- **Flash Program Memory Mode**: Programs start executing from Flash.
+- **System Memory Mode**: Used for downloading programs via serial port.
+- **Built-in SRAM Drive Mode**: Programs start executing from SRAM.
+
+---
+
+## 16. Minimal System Circuit of STM32
+
+### Components
+1. **Power Supply Section**:
+   - Power supply pins around the chip connect to power sources.
+   - VSS grounded, VDD connected to 3.3V, capacitors can be connected between them for stable power supply.
+   - VBAT can be connected to a backup battery for RTC and backup registers.
+2. **Crystal Oscillator Section**:
+   - Main clock crystal usually 8 MHz, multiplied internally to achieve 72 MHz main frequency.
+   - Crystal pins connected through net labels to specific STM32 pins with two 20pF capacitors as oscillation capacitors.
+3. **Reset Circuit**:
+   - Composed of a 10kΩ resistor and a 0.1μF capacitor, providing a reset signal.
+4. **Boot Configuration**:
+   - Using jumpers or DIP switches to configure BOOT pins' logic levels.
+5. **Download Port**:
+   - When using ST-Link to download programs, SWDIO and SWCLK pins need to be connected along with 3.3V and ground pins.
+
 ## Tools & Prototyping
 
 - Base RTOS: Extend FreeRTOS/Zephyr with custom IPC and scheduling logic.
