@@ -343,7 +343,7 @@ void test_race_condition() {
 ```
 ---
 
-## 11. Introduction to STM32F103C8T6
+## 11. STM32F103C8T6
 - **Core**: ARM Cortex-M3 core, with a core performance score of 177 and a clock speed of 72 MHz.
 - **Memory**:
   - RAM (operational memory, the actual storage medium is SRAM) size: 20 KB.
