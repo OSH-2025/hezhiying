@@ -32,9 +32,11 @@
 
 - `int swtch(int pid)` = 调度到 PID
 
-- `int sleep(int ms)` = 等待至少 ms 后调度，传入 -1 表示无限等待直到被调度
+- `int sleep(int ms)` = 等待至少 ms 后调度，传入 0 表示 yield()，传入 -1 表示无限等待
 
-- `int sleepus(int us)` = 等待至少 us 后调度，传入 -1 表示无限等待直到被调度
+- `int sleepus(int us)` = 等待至少 us 后调度，传入 0 表示 yield()，传入 -1 表示无限等待
+
+- `int brkwait(int pid)` = 使得 PID 退出等待，例如 `sleep()` 带来的等待
 
 - `int yield()` = 调度走
 
