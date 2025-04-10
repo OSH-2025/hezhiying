@@ -1,6 +1,6 @@
-### April 2nd Meeting Summary
+## April 2nd Meeting Summary
 
-for more details click [here](./April2-meeting（detail）.md) and [HERE](4.2录音纪要)
+for more details click [here](./April2-meeting（detail）.md) and [HERE](4.2会议录音)
 
 #### System Optimization and Program Execution
 The meeting discussed system design using STM3F103 and GT6 processors, with the processor having one megabyte of flash and 96K RAM. It was decided to allocate 96K for system use and 64K for user programs. Both system and user programs are managed equally by the same scheduler due to the lack of built-in memory protection. User programs can be stored in flash or run directly from memory.
