@@ -2,7 +2,7 @@
 
 [中文](README_cn.md) | [English](README.md)
 
-![logo](/src/pict/logo_test.png)
+![logo](media/pict/logo_test.png)
 
 ## 项目成员
 
