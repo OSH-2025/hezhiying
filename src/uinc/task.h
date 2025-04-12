@@ -10,7 +10,7 @@ task.h - Internal header for task manipulation
 #ifndef _TASK_U_H
 #define _TASK_U_H
 
-#include "../inc/global.h"
+#include "../sys/global.h"
 
 // entryproc: Entry proc for task
 typedef int (*entryproc)(void* param);
