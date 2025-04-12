@@ -16,7 +16,7 @@
 
 所有需要传入 PID 的都可以传入 `-1` 表示当前的 PID。
 
-- `int exec(entryproc p, void* param, const startinf* si, procinf *pi)` = 启动新的任务
+- `int exec(entryproc p, void* param, const startinf* si)` = 启动新的任务
 
 - `int terminate(int pid)` = 中止任务
 
