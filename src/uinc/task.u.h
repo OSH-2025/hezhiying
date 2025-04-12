@@ -3,7 +3,7 @@
 LightRT : Coursework for 'Hezhiying' team @ OSH 2025, USTC
 ~~~~~~~
 
-task.h - Internal header for task manipulation
+task.u.h - User header for task manipulation
 
 */
 

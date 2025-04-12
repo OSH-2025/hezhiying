@@ -14,6 +14,6 @@ lightrt.h - LightRT preempt multitasking/realtime operating system for STM32 con
 #include "../sys/global.h"
 
 // Subsystems
-#include "task.h" // Task manipulation
+#include "task.u.h" // Task manipulation
 
 #endif

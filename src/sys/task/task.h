@@ -11,6 +11,6 @@ task.h - Internal header for task manipulation
 #define _TASK_H
 
 #include "../global.h"
-#include "../../uinc/task.h"
+#include "../../uinc/task.u.h"
 
 #endif
