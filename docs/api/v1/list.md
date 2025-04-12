@@ -42,13 +42,15 @@
 
 ## Signal & Synchronization, Access control 信号和同步、访问控制
 
-- `int signew(int flag, int** sid)` = 创建信号，可以创建全局 (所有处理器共享) 或者局部 (处理器内或者任务内)
+- `int signew(int flag, int* sid)` = 创建信号，可以创建全局 (所有处理器共享) 或者局部 (处理器内或者任务内)
 
 - `int sigclose(int sig)` = 关闭信号
 
 - `int sigset(int sig, int s)` = 设置 (s = 1) 或恢复 (s = 0) 信号
 
 - `int waitsig(int sig, int timeout)` = 等待信号 (timeout = -1 表示一直等待)
+
+- `int waitany(const int* sigs, int nsig, int timeout)` = 等待任意一个信号 (timeout = -1 表示一直等待)
 
 - `int readsig(int sig)` = 读取信号状态
 
