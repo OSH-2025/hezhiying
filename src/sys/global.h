@@ -21,7 +21,7 @@ global.h - Global definitions and constants
 #define LRT_UAPI // User side system API
 
 // Normal types
-typedef unsigned int uint;
+typedef unsigned int uint; // By default, 32 bits.
 
 // Utility macros
 #define MAKEBIT(n) (1 << (n)) // Make bit n to 1
@@ -30,5 +30,6 @@ typedef unsigned int uint;
 // Return values
 #define STATUS_SUCCESS                0   // Successfully done
 #define STATUS_NOT_IMPLEMENTED        -1  // Not implemented
+#define STATUS_RESOURCE_INSUFFICIENT  -2  // Resource run out
 
 #endif

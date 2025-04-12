@@ -30,4 +30,11 @@ typedef struct
 // Execute a new task
 LRT_UAPI int exec(entryproc p, void* param, const startinf* si);
 
+// Nice values
+#define MAX_USER_NICE  100  // Maximum nice value for user task
+#define SUSPEND_NICE   -1   // Suspended task nice value
+
+// Max number of tasks
+#define MAX_TASK_ITEM  100
+
 #endif
