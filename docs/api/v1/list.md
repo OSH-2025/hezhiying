@@ -42,7 +42,7 @@
 
 ## Signal & Synchronization, Access control 信号和同步、访问控制
 
-- `int signew(int flag, int* sid)` = 创建信号，可以创建全局 (所有处理器共享) 或者局部 (处理器内或者任务内)
+- `int signew(int flag, int* sig)` = 创建信号，可以创建全局 (所有处理器共享) 或者局部 (处理器内或者任务内)
 
 - `int sigclose(int sig)` = 关闭信号
 
