@@ -30,6 +30,8 @@ int signew(uint flag, int *sid)
     siglist[newsig].status = SIG_INACTIVE;
     siglist[newsig].flag = flag;
 
+    *sid = newsig;
+
     return STATUS_SUCCESS;
 }
 
