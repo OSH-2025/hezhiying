@@ -29,7 +29,7 @@ typedef unsigned int uint; // By default, 32 bits.
 #define NOTIMPL (This must be error if used! & !) // Not implemented
 
 // System object ID check
-#define IDWRONG(id, type) (((id) < 0) || ((id) >= MAX_##type##_ITEM))
+#define IDWRONG(id, type) (((id) < 0) || ((id) >= MAX_##type##_ITEM)) //
 
 // Return values
 #define STATUS_SUCCESS                0   // Successfully done
