@@ -7,8 +7,8 @@
 
 #define MAX_SIGNAL_ITEM 100
 
-#define SIG_FLAG_DEFAULT    0
-#define SIG_FLAG_AUTORESET  MAKEBIT(1)
+#define SIG_FLAG_DEFAULT 0
+#define SIG_FLAG_AUTORESET MAKEBIT(1)
 
 LRT_UAPI int signew(uint flag, int *sid);
 LRT_UAPI int sigclose(int sig);

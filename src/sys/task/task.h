@@ -15,7 +15,8 @@ task.h - Internal header for task manipulation
 
 #include <stdint.h>
 
-typedef struct {
+typedef struct
+{
     // Manually saved
     uint r4;
     uint r5;
@@ -41,10 +42,10 @@ typedef struct {
     uint control;
 } context;
 
-#define WAIT_NOWAIT    0
-#define WAIT_SLEEP     1
-#define WAIT_SIGNAL    2
-#define WAIT_SIGNALS   3 NOTIMPL
+#define WAIT_NOWAIT 0
+#define WAIT_SLEEP 1
+#define WAIT_SIGNAL 2
+#define WAIT_SIGNALS 3 NOTIMPL
 
 typedef struct
 {
@@ -61,9 +62,9 @@ typedef struct
     int nice; // Nice value; (less => higher priority), -1 = SUSPEND
 
     // Realtime mode
-    int realtime; // In realtime mode? (1 = realtime)
+    int realtime;       // In realtime mode? (1 = realtime)
     uint rtlow, rthigh; // Realtime timeout tick
-    
+
     // Wait
     struct
     {
@@ -80,10 +81,10 @@ typedef struct
             {
                 int signal;
             } signal;
-            
+
             struct
             {
-                int* signals;
+                int *signals;
                 int nsignal;
             } signals;
         } param;

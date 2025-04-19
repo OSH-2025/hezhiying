@@ -1,6 +1,7 @@
 # About STM32 context switch (`GPT 4o`)
 
 # Q1
+
 ```
 Write a STM32 ARM assembly routine that will save all context to a specified C struct and show how to restore them. Ans show how to call the routine from C code.
 ```
@@ -10,14 +11,15 @@ Here's how to write an ARM assembly routine for STM32 that saves the full CPU co
 ---
 
 ## 🧠 **Assumptions**
-- Target: Cortex-M (STM32F1/F4/etc., based on ARMv7-M architecture)
-- Toolchain: ARM GCC
-- The C struct holds:
-  - General-purpose registers: `R0–R12`
-  - Stack pointer: `SP`
-  - Link register: `LR`
-  - Program counter: `PC`
-  - Program status register: `xPSR`
+
+-   Target: Cortex-M (STM32F1/F4/etc., based on ARMv7-M architecture)
+-   Toolchain: ARM GCC
+-   The C struct holds:
+    -   General-purpose registers: `R0–R12`
+    -   Stack pointer: `SP`
+    -   Link register: `LR`
+    -   Program counter: `PC`
+    -   Program status register: `xPSR`
 
 > **Note:** `PC`, `SP`, and `xPSR` are special registers and require special handling.
 
@@ -38,6 +40,7 @@ typedef struct {
 ---
 
 ## ⚙️ **2. Assembly Routine (save/restore)**
+
 File: `context.S`
 
 ```assembly
@@ -145,15 +148,17 @@ void test_context_switch(void) {
 ---
 
 ## ⚠️ **Important Notes**
-- `MSP` is used here assuming thread mode with main stack.
-- This example doesn't handle floating point (`S0–S31`)—add `VSTM`/`VLDM` if needed.
-- You might need to make the routine `__attribute__((naked))` in some compilers if calling from C and handling SP manually.
+
+-   `MSP` is used here assuming thread mode with main stack.
+-   This example doesn't handle floating point (`S0–S31`)—add `VSTM`/`VLDM` if needed.
+-   You might need to make the routine `__attribute__((naked))` in some compilers if calling from C and handling SP manually.
 
 ---
 
 Would you like a version that uses inline assembly or handles interrupts/FPU too?
 
 # Q2
+
 ```
 Explain __attribute__((naked))
 ```
@@ -228,17 +233,18 @@ No prologue, no epilogue—**you must handle everything yourself** (saving/resto
 ## 🛑 When to Use It
 
 Use `naked` **only** when:
-- You're writing a function entirely in assembly.
-- You want precise control over registers, especially SP, LR, PC.
-- You're doing context switches, interrupt trampolines, or fast ISR stubs.
+
+-   You're writing a function entirely in assembly.
+-   You want precise control over registers, especially SP, LR, PC.
+-   You're doing context switches, interrupt trampolines, or fast ISR stubs.
 
 ---
 
 ## ⚠️ Gotchas
 
-- Never mix normal C code with `naked` functions—undefined behavior.
-- Don't return with `return;` — use `BX LR` or `POP {PC}` manually.
-- No local variables or function calls inside a `naked` function.
+-   Never mix normal C code with `naked` functions—undefined behavior.
+-   Don't return with `return;` — use `BX LR` or `POP {PC}` manually.
+-   No local variables or function calls inside a `naked` function.
 
 ---
 
@@ -261,6 +267,7 @@ __attribute__((naked)) void PendSV_Handler(void) {
 Want help wrapping your context switching code in a `naked` function properly?
 
 # Q3
+
 ```
 But your code use R1 as intermediate register when restoring PC. This will affect R1 content. Is it?
 ```
@@ -287,9 +294,11 @@ BUT — if you’re restoring **all registers**, and `R1` is supposed to be rest
 ## 🛠️ Solution Options
 
 ### ✅ Option 1: Use a callee-saved register not being restored
+
 If you haven't yet written to `R1`, you could use a different scratch register **after** restoring everything else — say, `R14` (`LR`) or even `R3`, if it's not important at that moment. But usually this is tricky because **all general-purpose registers are supposed to be restored**.
 
 ### ✅ Option 2: Restore all at once using `LDMIA`
+
 You can avoid the issue altogether by restoring multiple registers including the PC in a single instruction:
 
 ```assembly
@@ -308,6 +317,7 @@ Still using `R1` here, but maybe we already restored R1 from memory — **so thi
 ---
 
 ### ✅ Option 3: Push PC directly into stack and `POP {PC}`
+
 Another trick is to **load PC into the stack** and then:
 
 ```assembly
@@ -335,9 +345,10 @@ But ARM **does not allow PC in LDMIA** unless you're in **ARM state or handler m
 ## 🔐 Best Practice
 
 When you're restoring context and need to preserve every bit, including all GPRs:
-- **Restore GPRs first**, including R1
-- Use `POP {PC}` or `BX LR` to jump back
-- Avoid clobbering any register that's being restored
+
+-   **Restore GPRs first**, including R1
+-   Use `POP {PC}` or `BX LR` to jump back
+-   Avoid clobbering any register that's being restored
 
 ---
 
@@ -364,6 +375,7 @@ restore_context:
 Let me know if you'd like a reworked version of the full save/restore pair with this fix applied!
 
 # Q4
+
 ```
 Please explain how the last shown code avoid touching R2, or is it defined by GCC arm as caller saved?
 ```
@@ -374,7 +386,7 @@ Excellent follow-up — you're asking exactly the kind of question that matters 
 
 ## 💡 Short Answer:
 
-👉 **No, the last code does *not* avoid touching `R2`**, and that's okay **because `R2` is caller-saved** according to the **ARM Procedure Call Standard (AAPCS)**.
+👉 **No, the last code does _not_ avoid touching `R2`**, and that's okay **because `R2` is caller-saved** according to the **ARM Procedure Call Standard (AAPCS)**.
 
 ---
 
@@ -382,53 +394,58 @@ Excellent follow-up — you're asking exactly the kind of question that matters 
 
 In the ARM calling convention:
 
-| Register | Role                     | Saved by |
-|----------|--------------------------|----------|
-| `R0–R3`  | Argument/result registers | **Caller** |
-| `R4–R11` | Callee-saved registers   | **Callee** |
+| Register | Role                         | Saved by   |
+| -------- | ---------------------------- | ---------- |
+| `R0–R3`  | Argument/result registers    | **Caller** |
+| `R4–R11` | Callee-saved registers       | **Callee** |
 | `R12`    | Intra-procedure-call scratch | **Caller** |
-| `R13`    | Stack Pointer (SP)       | — |
-| `R14`    | Link Register (LR)       | — |
-| `R15`    | Program Counter (PC)     | — |
+| `R13`    | Stack Pointer (SP)           | —          |
+| `R14`    | Link Register (LR)           | —          |
+| `R15`    | Program Counter (PC)         | —          |
 
 So:
-- If a function (like your context restore routine) **uses R2**, it doesn't need to preserve it before modifying it.
-- It’s the **caller’s responsibility** to save R2 if it needs its value after the call.
+
+-   If a function (like your context restore routine) **uses R2**, it doesn't need to preserve it before modifying it.
+-   It’s the **caller’s responsibility** to save R2 if it needs its value after the call.
 
 ---
 
 ## ✅ Why this is okay in your context
 
 In a **context switch** or **interrupt return** scenario:
-- You’re restoring the *entire* CPU state from memory — not just returning to your caller.
-- You're **not returning to C code** at all — you're jumping into a thread/task/ISR with a full context (R0–R12, SP, LR, PC, xPSR).
+
+-   You’re restoring the _entire_ CPU state from memory — not just returning to your caller.
+-   You're **not returning to C code** at all — you're jumping into a thread/task/ISR with a full context (R0–R12, SP, LR, PC, xPSR).
 
 Thus:
-- It’s **safe to use R2 (or any caller-saved register)** as scratch, because you're replacing its value anyway from the saved context.
+
+-   It’s **safe to use R2 (or any caller-saved register)** as scratch, because you're replacing its value anyway from the saved context.
 
 ---
 
 ## 🛡️ Want to be extra cautious?
 
 If you **truly want to avoid clobbering any registers**, then:
-- Don’t use any GPR (`R0–R12`) directly for scratch if you're restoring them all.
-- Instead:
-  - Use **stack** (e.g. push the value, then pop PC).
-  - Or rearrange code to use registers *after* they've been restored.
+
+-   Don’t use any GPR (`R0–R12`) directly for scratch if you're restoring them all.
+-   Instead:
+    -   Use **stack** (e.g. push the value, then pop PC).
+    -   Or rearrange code to use registers _after_ they've been restored.
 
 ---
 
 ## ✅ Summary
 
-- ✅ **R2 is caller-saved**, so it's safe to use in `restore_context`.
-- 🧠 In a full context restore, **nothing is preserved**, so clobbering is irrelevant unless you're doing partial saves.
-- 🧼 If you're writing truly "transparent" assembly (used from C), be careful which registers you touch.
+-   ✅ **R2 is caller-saved**, so it's safe to use in `restore_context`.
+-   🧠 In a full context restore, **nothing is preserved**, so clobbering is irrelevant unless you're doing partial saves.
+-   🧼 If you're writing truly "transparent" assembly (used from C), be careful which registers you touch.
 
 ---
 
-Would you like me to show a totally register-neutral version that touches *no GPRs* unnecessarily — even if it means going through the stack a bit more?
+Would you like me to show a totally register-neutral version that touches _no GPRs_ unnecessarily — even if it means going through the stack a bit more?
 
 # Q5
+
 ```
 Concluding all the above, I want two routines in my STM32 project to allow pseudo-multitasking, which requires task switch. Write the code and explain it.
 ```
@@ -440,22 +457,25 @@ Great! Let's wrap all the above ideas into two clean and functional **ARM Cortex
 ## 🎯 Objective
 
 We’ll implement two routines:
+
 1. `save_context`: Save CPU registers into a C struct.
 2. `restore_context`: Restore CPU registers from a C struct.
 
 We'll also provide:
-- A simple `TaskContext` struct in C.
-- C code that shows how to switch tasks.
-- Detailed comments for learning and clarity.
+
+-   A simple `TaskContext` struct in C.
+-   C code that shows how to switch tasks.
+-   Detailed comments for learning and clarity.
 
 ---
 
 ## 🧠 Assumptions
-- Target: STM32 Cortex-M (M3/M4/M7 etc.)
-- Using ARM Thumb mode (standard for Cortex-M).
-- Tasks run in **thread mode**, not handler mode.
-- Context stored manually (not relying on exception stack frame).
-- Pseudo-multitasking = cooperative (tasks yield manually).
+
+-   Target: STM32 Cortex-M (M3/M4/M7 etc.)
+-   Using ARM Thumb mode (standard for Cortex-M).
+-   Tasks run in **thread mode**, not handler mode.
+-   Context stored manually (not relying on exception stack frame).
+-   Pseudo-multitasking = cooperative (tasks yield manually).
 
 ---
 
@@ -617,23 +637,24 @@ int main(void) {
 
 ## 🔐 Why This Works
 
-- You're manually saving **callee-saved registers** (`R4–R11`) and the **stack pointer**, **program counter**, and **xPSR**.
-- On task switch, the full CPU state is restored—so the new task resumes **as if it was never interrupted**.
-- Cooperative switching means the task itself decides when to yield.
+-   You're manually saving **callee-saved registers** (`R4–R11`) and the **stack pointer**, **program counter**, and **xPSR**.
+-   On task switch, the full CPU state is restored—so the new task resumes **as if it was never interrupted**.
+-   Cooperative switching means the task itself decides when to yield.
 
 ---
 
 ## ⚠️ Final Tips
 
-- For preemptive multitasking, you'd need an interrupt like `SysTick` or `PendSV`.
-- Make sure each task has its **own stack**.
-- Always keep Thumb bit (bit 24) set in `xPSR`.
+-   For preemptive multitasking, you'd need an interrupt like `SysTick` or `PendSV`.
+-   Make sure each task has its **own stack**.
+-   Always keep Thumb bit (bit 24) set in `xPSR`.
 
 ---
 
 Want to take this further and add preemptive scheduling or integrate with `PendSV_Handler`? Let me know and I’ll build on this.
 
 # Q6
+
 ```
 Explain thumb bit
 ```
@@ -646,17 +667,18 @@ Great question! The **Thumb bit** is a crucial part of ARM Cortex-M programming,
 
 The **Thumb bit** is **bit 24** of the **Program Status Register (xPSR)** in ARM Cortex-M processors.
 
-- It's often called **T-bit**.
-- It indicates whether the processor is executing in **Thumb mode** or **ARM mode**.
+-   It's often called **T-bit**.
+-   It indicates whether the processor is executing in **Thumb mode** or **ARM mode**.
 
 ---
 
 ## 🤔 Why does it matter?
 
 ### On Cortex-M:
-- **Only Thumb mode is supported**.
-- All instructions must be **16-bit or 32-bit Thumb instructions**.
-- So, **T-bit must always be set to 1**.
+
+-   **Only Thumb mode is supported**.
+-   All instructions must be **16-bit or 32-bit Thumb instructions**.
+-   So, **T-bit must always be set to 1**.
 
 If it's **cleared to 0**, the processor will try to interpret instructions as **ARM instructions**, which **don't exist on Cortex-M**, resulting in a **HardFault**.
 
@@ -665,9 +687,10 @@ If it's **cleared to 0**, the processor will try to interpret instructions as **
 ## 🔍 Where do you find the T-bit?
 
 It's bit 24 of `xPSR`, which gets loaded into the CPU when:
-- Returning from an interrupt.
-- Manually setting context via `MSR xPSR, R3` (like in your context switching code).
-- Using special return instructions like `BX` or `POP {…, PC}`.
+
+-   Returning from an interrupt.
+-   Manually setting context via `MSR xPSR, R3` (like in your context switching code).
+-   Using special return instructions like `BX` or `POP {…, PC}`.
 
 You can set it like this:
 
@@ -705,10 +728,10 @@ BX R2     ; R2 contains PC
 
 ## ✅ TL;DR
 
-| Thumb Bit (T-bit) | Meaning         | Valid on Cortex-M? |
-|-------------------|------------------|---------------------|
-| `1`               | Thumb mode ✅     | ✅ Required          |
-| `0`               | ARM mode ❌       | ❌ Causes crash      |
+| Thumb Bit (T-bit) | Meaning       | Valid on Cortex-M? |
+| ----------------- | ------------- | ------------------ |
+| `1`               | Thumb mode ✅ | ✅ Required        |
+| `0`               | ARM mode ❌   | ❌ Causes crash    |
 
 Always set bit 24 (`0x01000000`) in `xPSR` when initializing context manually.
 

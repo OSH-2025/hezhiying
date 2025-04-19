@@ -4,18 +4,19 @@
 
 ## 项目成员
 
-- [位文康](https://github.com/jianyingzhihe)
-- [罗嘉宏](https://github.com/ustcljh)
-- [崔卓](https://github.com/crosaa)
-- [郭彦禛](https://github.com/EricGuoYanzhen)
+-   [位文康](https://github.com/jianyingzhihe)
+-   [罗嘉宏](https://github.com/ustcljh)
+-   [崔卓](https://github.com/crosaa)
+-   [郭彦禛](https://github.com/EricGuoYanzhen)
 
 ---
 
 ## 1. 项目核心架构
 
-- 微内核设计：
-  - 实现轻量级内核，提供基础服务（调度、进程间通信、内存管理），以最小化开销。
-  - 用户空间服务（如驱动、协议）作为独立线程运行，以实现模块化。
+-   微内核设计：
+    -   实现轻量级内核，提供基础服务（调度、进程间通信、内存管理），以最小化开销。
+    -   用户空间服务（如驱动、协议）作为独立线程运行，以实现模块化。
+
 ```c
 // Kernel initialization
 void kernel_init() {
@@ -34,14 +35,16 @@ void uart_driver_thread(void* args) {
     }
 }
 ```
+
 ---
 
 ## 2. 多线程交互
 
-- 线程管理：
-  - 抢占式调度器：基于优先级的轮询调度，平衡任务优先级，确保公平性。
-  - 上下文切换：通过线程控制块（ TCB ）存储寄存器状态和栈指针，优化切换效率。
-  - 线程同步：本地互斥锁/信号量用于共享内存；原子操作用于低级锁。
+-   线程管理：
+    -   抢占式调度器：基于优先级的轮询调度，平衡任务优先级，确保公平性。
+    -   上下文切换：通过线程控制块（ TCB ）存储寄存器状态和栈指针，优化切换效率。
+    -   线程同步：本地互斥锁/信号量用于共享内存；原子操作用于低级锁。
+
 ```c
 // Thread Control Block (TCB) structure
 typedef struct {
@@ -79,17 +82,19 @@ void mutex_unlock(Mutex* m) {
     m->owner = NULL;
 }
 ```
+
 ---
 
 ## 3. 内存共享
 
-- 本地内存：
-  - 堆管理：使用伙伴系统或 slab 分配器进行动态分配。
-  - 共享区域：通过内核管理的互斥锁划分受控访问的内存区域。
-- 分布式内存：
-  - 全局地址空间：将远程内存映射到虚拟地址范围（例如 `0x8000_0000+` 表示远程 MCU ）。
-  - 代理访问：通过内核消息（如包含 MCU ID、地址和数据的 SPI/CAN 数据包）实现透明读写。
-  - 缓存：可选 LRU 缓存优化高频远程访问，显式失效机制确保一致性。
+-   本地内存：
+    -   堆管理：使用伙伴系统或 slab 分配器进行动态分配。
+    -   共享区域：通过内核管理的互斥锁划分受控访问的内存区域。
+-   分布式内存：
+    -   全局地址空间：将远程内存映射到虚拟地址范围（例如 `0x8000_0000+` 表示远程 MCU ）。
+    -   代理访问：通过内核消息（如包含 MCU ID、地址和数据的 SPI/CAN 数据包）实现透明读写。
+    -   缓存：可选 LRU 缓存优化高频远程访问，显式失效机制确保一致性。
+
 ```c
 // Local heap allocator (buddy system simplified)
 void* heap_alloc(size_t size) {
@@ -119,16 +124,18 @@ void remote_write(uint8_t mcu_id, uint32_t addr, uint32_t data) {
     ipc_send(KERNEL_PID, &msg);
 }
 ```
+
 ---
 
 ## 4. 微控制器间通信
 
-- 协议层：
-  - 传输：使用 CAN 总线或 SPI 协议；数据包包含源/目标 ID、读写命令、地址和数据。
-  - 消息队列：按优先级（如控制 vs 数据）分类消息，通过中断处理入站数据包。
-- API：
-  - `remote_read(mcu_id, address)`
-  - `remote_write(mcu_id, address, data)`
+-   协议层：
+    -   传输：使用 CAN 总线或 SPI 协议；数据包包含源/目标 ID、读写命令、地址和数据。
+    -   消息队列：按优先级（如控制 vs 数据）分类消息，通过中断处理入站数据包。
+-   API：
+    -   `remote_read(mcu_id, address)`
+    -   `remote_write(mcu_id, address, data)`
+
 ```c
 // CAN packet structure
 typedef struct {
@@ -151,16 +158,18 @@ void can_interrupt_handler() {
     message_queue_enqueue(&inbound_queue, &packet);
 }
 ```
+
 ---
 
 ## 5. 分布式调度
 
-- 去中心化协调：
-  - 任务池：全局任务队列通过原子操作访问；MCU 空闲时可获取任务。
-  - 工作窃取：MCU 从邻居队列“窃取”任务以平衡负载。
-- 容错机制：
-  - 心跳监测：检测离线 MCU 并重新分配其任务。
-  - 检查点：定期将任务状态保存到非易失性存储，支持故障恢复。
+-   去中心化协调：
+    -   任务池：全局任务队列通过原子操作访问；MCU 空闲时可获取任务。
+    -   工作窃取：MCU 从邻居队列“窃取”任务以平衡负载。
+-   容错机制：
+    -   心跳监测：检测离线 MCU 并重新分配其任务。
+    -   检查点：定期将任务状态保存到非易失性存储，支持故障恢复。
+
 ```c
 // Global task queue
 typedef struct {
@@ -188,14 +197,16 @@ void heartbeat_check() {
     }
 }
 ```
+
 ---
 
 ## 6. 跨 MCU 同步
 
-- 分布式锁管理器（ DLM ）：
-  - 互斥锁分配“归属” MCU 管理锁请求。
-  - 消息支持 `lock()`、`unlock()` 以及授权/拒绝响应。
-  - 超时机制防止死锁。
+-   分布式锁管理器（ DLM ）：
+    -   互斥锁分配“归属” MCU 管理锁请求。
+    -   消息支持 `lock()`、`unlock()` 以及授权/拒绝响应。
+    -   超时机制防止死锁。
+
 ```c
 // Distributed mutex structure
 typedef struct {
@@ -216,19 +227,21 @@ void dmutex_unlock(DMutex* dm) {
     ipc_send(KERNEL_PID, &msg);
 }
 ```
+
 ---
 
 ## 7. 开发者 API
 
-- 线程：
-  - `thread_create(entry_func, priority)`
-  - `thread_yield()`、`thread_sleep(ms)`
-- 内存：
-  - `shm_alloc(size)`、`shm_free(addr)`
-  - `remote_map(mcu_id, remote_addr, local_addr)`
-- 同步：
-  - `mutex_init()`、`mutex_lock()`、`mutex_unlock()`
-  - `barrier_wait()`、`message_send(mcu_id, data)`
+-   线程：
+    -   `thread_create(entry_func, priority)`
+    -   `thread_yield()`、`thread_sleep(ms)`
+-   内存：
+    -   `shm_alloc(size)`、`shm_free(addr)`
+    -   `remote_map(mcu_id, remote_addr, local_addr)`
+-   同步：
+    -   `mutex_init()`、`mutex_lock()`、`mutex_unlock()`
+    -   `barrier_wait()`、`message_send(mcu_id, data)`
+
 ```c
 // Thread creation
 int thread_create(void (*entry_func)(void*), uint8_t priority) {
@@ -258,13 +271,15 @@ void barrier_wait(Barrier* b) {
     }
 }
 ```
+
 ---
 
 ## 8. 安全与可靠性
 
-- 访问控制：按 MCU 分配远程内存区域的权限。
-- CRC / 校验和：确保通信数据完整性。
-- Watchdog Timers：重启无响应的 MCU 。
+-   访问控制：按 MCU 分配远程内存区域的权限。
+-   CRC / 校验和：确保通信数据完整性。
+-   Watchdog Timers：重启无响应的 MCU 。
+
 ```c
 // Access control check
 bool check_memory_access(uint8_t mcu_id, uint32_t addr) {
@@ -288,6 +303,7 @@ void watchdog_reset() {
     watchdog_hw_reset();
 }
 ```
+
 ---
 
 ## 9. 工作流
@@ -300,6 +316,7 @@ void watchdog_reset() {
     - 接受授权后，线程 B 通过 `remote_read()` / `remote_write()` 读写。
 3. 任务迁移：
     - MCU3 的调度器通过“工作窃取”从 MCU2 队列获取任务。
+
 ```c
 // Thread A on MCU1
 void thread_a(void* args) {
@@ -317,12 +334,14 @@ void thread_b(void* args) {
     dmutex_unlock(&dm);
 }
 ```
+
 ---
 
 ## 10. 优化
 
-- 资源限制：限制每个 MCU 的线程数量和堆大小。
-- 测试：使用模拟的 MCU 网络调试竞态条件。
+-   资源限制：限制每个 MCU 的线程数量和堆大小。
+-   测试：使用模拟的 MCU 网络调试竞态条件。
+
 ```c
 // Enforce thread limit
 int thread_create_limited(void (*func)(void*), uint8_t priority) {
@@ -340,24 +359,29 @@ void test_race_condition() {
     run_simulation(1000); // Run for 1000 cycles
 }
 ```
+
 ---
-## 11.STM32F103C8T6 
-- **内核**: ARM Cortex-M3 内核，具有 177 的内核跑分，主频为 72 MHz。
-- **存储**:
-  - RAM（运行内存，实际的存储介质是 SRAM）大小：20 KB。
-  - ROM（程序存储器，实际存储介质为 Flash 闪存）大小：64 KB。
-- **供电**: 供电电压为 2.0 - 3.6 V，标准 3.3 V 供电。与 51 单片机的 5 V 供电不同，若有 5 V 电压输入，需加稳压芯片降至 3.3 V 后再给芯片供电。
-- **封装**: 采用 LQFP48 封装，共有 48 个引脚。
+
+## 11.STM32F103C8T6
+
+-   **内核**: ARM Cortex-M3 内核，具有 177 的内核跑分，主频为 72 MHz。
+-   **存储**:
+    -   RAM（运行内存，实际的存储介质是 SRAM）大小：20 KB。
+    -   ROM（程序存储器，实际存储介质为 Flash 闪存）大小：64 KB。
+-   **供电**: 供电电压为 2.0 - 3.6 V，标准 3.3 V 供电。与 51 单片机的 5 V 供电不同，若有 5 V 电压输入，需加稳压芯片降至 3.3 V 后再给芯片供电。
+-   **封装**: 采用 LQFP48 封装，共有 48 个引脚。
 
 ---
 
 ## 12.STM32 F103 C8T6 的片上资源和外设
 
 ### 位于 Cortex-M3 内核里面的外设
+
 1. **NVC（嵌套向量中断控制器）**: 用于管理中断，比如配置中断优先级等。
 2. **CS（系统定时器）**: 主要给操作系统提供定时服务。在不使用操作系统的情况下，也可以用此定时器完成类似 `delay` 函数的功能。
 
 ### 位于 Cortex-M3 内核以外的外设
+
 1. **RCC（复位和时钟控制）**: 配置系统的时钟，并使能各模块的时钟。其他外设在上电情况下默认没有时钟，操作前必须通过 RCC 使能时钟。
 2. **GPIO（通用 I/O 口）**: 可以用来点灯、读取按键等，是单片机最基本的功能之一。
 3. **AFIO（复用 I/O 口）**: 完成复用功能端口的重定义，以及中断端口的配置。
@@ -386,16 +410,19 @@ void test_race_condition() {
 ## 13.STM32 F103 C8T6 的命名规则和系统结构
 
 ### 命名规则
-- **STM32**: 基于 ARM 核心的 32 位微控制器。
-- **F**: 通用类型。
-- **103**: 增强型。
-- **C**: 引脚数目为 48。
-- **8**: Flash 闪存容量为 64 KB。
-- **T**: 封装类型为 LQFP。
-- **6**: 温度范围为 -40 至 85 摄氏度。
+
+-   **STM32**: 基于 ARM 核心的 32 位微控制器。
+-   **F**: 通用类型。
+-   **103**: 增强型。
+-   **C**: 引脚数目为 48。
+-   **8**: Flash 闪存容量为 64 KB。
+-   **T**: 封装类型为 LQFP。
+-   **6**: 温度范围为 -40 至 85 摄氏度。
 
 ### 系统结构
+
 分为四个部分：
+
 1. **左上角**: Cortex-M3 内核，引出三条总线连接 Flash 闪存和其他外设。
 2. **左下角**: DMA（直接内存访问），负责数据搬运等简单重复工作。
 3. **右下角**: 外设种类和分布。
@@ -406,15 +433,17 @@ void test_race_condition() {
 ## 14.STM32F103C8T6 的系统结构
 
 ### 整体结构划分
+
 1. **左上角**: Cortex-M3 内核。
-   - **ICode 总线**: 加载程序指令，连接到 Flash 闪存。
-   - **DCode 总线**: 加载数据，如常量和调试参数。
-   - **System 总线**: 连接 RAM、FMC 等。
+    - **ICode 总线**: 加载程序指令，连接到 Flash 闪存。
+    - **DCode 总线**: 加载数据，如常量和调试参数。
+    - **System 总线**: 连接 RAM、FMC 等。
 2. **左下角**: DMA（直接内存访问）。
 3. **右下角**: 外设种类和分布。
 4. **中间部分**: 连接内核与外设的各种总线和桥接。
 
 ### 总线系统
+
 1. **AHB（先进高性能总线）**: 挂载主要外设，如复位和时钟控制电路、SD 卡控制器等。
 2. **两个桥接**: 连接到 APB2 和 APB1 外设总线上。
 3. **APB2（先进外设总线 2）**: 性能较高，72 MHz，连接 GPIO 端口、USART、SPI、TIM、ADC、EXTI、AFIO 等。
@@ -425,74 +454,78 @@ void test_race_condition() {
 ## 15.STM32 F103 C8T6 的引脚定义和启动配置
 
 ### 引脚定义
-- **电源相关**: 包括 VBAT（备用电池供电引脚）、VSS（接地）、VDD（3.3 V 供电）。
-- **最小系统相关**: 包括系统复位引脚 NIST（低电平复位）。
-- **I/O 口功能口**: 多个引脚可作为 I/O 口、侵入检测或 RTC 引脚。
-- **启动配置引脚**: BOOT0 和 BOOT1，用于选择启动模式。
+
+-   **电源相关**: 包括 VBAT（备用电池供电引脚）、VSS（接地）、VDD（3.3 V 供电）。
+-   **最小系统相关**: 包括系统复位引脚 NIST（低电平复位）。
+-   **I/O 口功能口**: 多个引脚可作为 I/O 口、侵入检测或 RTC 引脚。
+-   **启动配置引脚**: BOOT0 和 BOOT1，用于选择启动模式。
 
 ### 启动配置
+
 通过配置 BOOT0 和 BOOT1 引脚选择启动模式：
-- **Flash 程序存储器模式**: 程序从 Flash 开始执行。
-- **系统存储器模式**: 用于串口下载程序。
-- **内置 SRAM 驱动模式**: 程序从 SRAM 开始执行。
+
+-   **Flash 程序存储器模式**: 程序从 Flash 开始执行。
+-   **系统存储器模式**: 用于串口下载程序。
+-   **内置 SRAM 驱动模式**: 程序从 SRAM 开始执行。
 
 ---
 
 ## 16.STM32 最小系统电路
 
 ### 组成部分
+
 1. **供电部分**:
-   - 主电源和模拟部分电源连接供电引脚。
-   - VSS 接地，VDD 接 3.3 V，之间可连接滤波电容保证供电稳定。
-   - VBAT 可接备用电池，为 RTC 和备份寄存器服务。
+    - 主电源和模拟部分电源连接供电引脚。
+    - VSS 接地，VDD 接 3.3 V，之间可连接滤波电容保证供电稳定。
+    - VBAT 可接备用电池，为 RTC 和备份寄存器服务。
 2. **晶振部分**:
-   - 主时钟晶振一般为 8 MHz，经过内部锁相环倍频得到 72 MHz 主频。
-   - 晶振引脚接两个 20 pF 的电容作为起振电容。
-   - 若需要 RTC 功能，还需接一个 32.768 kHz 的晶振。
+    - 主时钟晶振一般为 8 MHz，经过内部锁相环倍频得到 72 MHz 主频。
+    - 晶振引脚接两个 20 pF 的电容作为起振电容。
+    - 若需要 RTC 功能，还需接一个 32.768 kHz 的晶振。
 3. **复位电路**:
-   - 由 10 kΩ 电阻和 0.1 μF 电容组成，提供复位信号。
-   - 上电瞬间电容短路，NIST 引脚产生低电平，完成上电复位。
-   - 电容左边并联按键可实现手动复位。
+    - 由 10 kΩ 电阻和 0.1 μF 电容组成，提供复位信号。
+    - 上电瞬间电容短路，NIST 引脚产生低电平，完成上电复位。
+    - 电容左边并联按键可实现手动复位。
 4. **启动配置**:
-   - 使用跳线帽或拨码开关配置 BOOT 引脚的高低电平。
+    - 使用跳线帽或拨码开关配置 BOOT 引脚的高低电平。
 5. **下载端口**:
-   - 使用 ST-Link 下载程序时，需引出 SWDIO 和 SWCLK 引脚，以及 3.3 V 和接地引脚。
+    - 使用 ST-Link 下载程序时，需引出 SWDIO 和 SWCLK 引脚，以及 3.3 V 和接地引脚。
 
 ## 工具与原型设计
 
-- 基础 RTOS：基于 FreeRTOS 或 Zephyr 扩展自定义 IPC 和调度逻辑。
-- 硬件：使用支持 CAN/SPI 的 ARM Cortex-M 或 ESP32 。
+-   基础 RTOS：基于 FreeRTOS 或 Zephyr 扩展自定义 IPC 和调度逻辑。
+-   硬件：使用支持 CAN/SPI 的 ARM Cortex-M 或 ESP32 。
 
     此设计在可扩展性、实时性能和资源约束之间取得平衡，支持多微控制器协作系统。
 
 ## 4. 参考文献
 
-- [Bare Metal STM32 Programming Part 11: Using External Memories](https://vivonomicon.com/2020/07/26/bare-metal-stm32-programming-part-11-using-external-memories/)
+-   [Bare Metal STM32 Programming Part 11: Using External Memories](https://vivonomicon.com/2020/07/26/bare-metal-stm32-programming-part-11-using-external-memories/)
 
-- [Communication between Multiple Microcontrollers - Electrical Engineering Stack Exchange](https://electronics.stackexchange.com/questions/35773/communication-between-multiple-microcontrollers)
+-   [Communication between Multiple Microcontrollers - Electrical Engineering Stack Exchange](https://electronics.stackexchange.com/questions/35773/communication-between-multiple-microcontrollers)
 
-- [STM32 FreeRTOS Task Scheduling Tutorial with Example Code - Embedded There](https://embeddedthere.com/stm32-freertos-task-scheduling-tutorial/)
+-   [STM32 FreeRTOS Task Scheduling Tutorial with Example Code - Embedded There](https://embeddedthere.com/stm32-freertos-task-scheduling-tutorial/)
 
-- [Distributed Operating System - Wikipedia](https://en.wikipedia.org/wiki/Distributed_operating_system)
+-   [Distributed Operating System - Wikipedia](https://en.wikipedia.org/wiki/Distributed_operating_system)
 
-- [Microcontroller Based Distributed and Networked Control System for Public Cluster - ResearchGate](https://www.researchgate.net/publication/45854413_Microcontroller_based_distributed_and_networked_control_system_for_public_cluster)
+-   [Microcontroller Based Distributed and Networked Control System for Public Cluster - ResearchGate](https://www.researchgate.net/publication/45854413_Microcontroller_based_distributed_and_networked_control_system_for_public_cluster)
 
-- [A Survey of Distributed Real-Time Operating Systems for Embedded Systems](https://ieeexplore.ieee.org/document/9173338)
+-   [A Survey of Distributed Real-Time Operating Systems for Embedded Systems](https://ieeexplore.ieee.org/document/9173338)
 
-- [Microcontroller-Based Distributed Control Systems: Challenges and Solutions](https://www.researchgate.net/publication/340124567)
+-   [Microcontroller-Based Distributed Control Systems: Challenges and Solutions](https://www.researchgate.net/publication/340124567)
 
-- [Efficient Task Scheduling for Multi-Microcontroller Systems in IoT Applications](https://www.sciencedirect.com/science/article/pii/S1389128621001234)
+-   [Efficient Task Scheduling for Multi-Microcontroller Systems in IoT Applications](https://www.sciencedirect.com/science/article/pii/S1389128621001234)
 
-- [Design and Implementation of a Distributed Embedded System Using STM32 Microcontrollers](https://ieeexplore.ieee.org/document/9503214)
+-   [Design and Implementation of a Distributed Embedded System Using STM32 Microcontrollers](https://ieeexplore.ieee.org/document/9503214)
 
-- [Cluster-Based Multi-Core Scheduling for Real-Time Embedded Systems](https://www.mdpi.com/2079-9292/10/15/1823)
+-   [Cluster-Based Multi-Core Scheduling for Real-Time Embedded Systems](https://www.mdpi.com/2079-9292/10/15/1823)
 
-- [A Lightweight Distributed Operating System for IoT Edge Devices](https://www.researchgate.net/publication/354872391)
+-   [A Lightweight Distributed Operating System for IoT Edge Devices](https://www.researchgate.net/publication/354872391)
 
-- [Real-Time Multi-Microcontroller Communication Using CAN Bus in Embedded Systems](https://ieeexplore.ieee.org/document/9876543)
+-   [Real-Time Multi-Microcontroller Communication Using CAN Bus in Embedded Systems](https://ieeexplore.ieee.org/document/9876543)
 
-- [Embedded Systems for Robotics: Multi-Core Approaches to Motion Control](https://www.sciencedirect.com/science/article/pii/S0921889023000456)
+-   [Embedded Systems for Robotics: Multi-Core Approaches to Motion Control](https://www.sciencedirect.com/science/article/pii/S0921889023000456)
 
-- [Optimizing Distributed Embedded Systems with Shared Memory and Multi-Core Architectures](https://ieeexplore.ieee.org/document/10123456)
+-   [Optimizing Distributed Embedded Systems with Shared Memory and Multi-Core Architectures](https://ieeexplore.ieee.org/document/10123456)
 
-- [Edge Computing with Microcontroller Clusters: A Case Study on IoT Applications](https://www.mdpi.com/1424-8220/23/5/2678)  
+-   [Edge Computing with Microcontroller Clusters: A Case Study on IoT Applications](https://www.mdpi.com/1424-8220/23/5/2678)

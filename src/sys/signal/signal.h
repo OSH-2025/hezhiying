@@ -9,11 +9,12 @@
 #include "../../uinc/signal.u.h"
 #include "../task/task.s.h"
 
-#define SIG_EMPTY       -1
-#define SIG_INACTIVE    0
-#define SIG_ACTIVE      1
+#define SIG_EMPTY -1
+#define SIG_INACTIVE 0
+#define SIG_ACTIVE 1
 
-typedef struct {
+typedef struct
+{
     int status;
     uint flag;
 } signl;

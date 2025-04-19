@@ -8,10 +8,10 @@ Embedded systems are widely used in various devices, most of which have only one
 
 ## 1. Bare-metal Programming (No Operating System)
 
-- **Single-task Sequential Execution**:
-  In simple systems without an operating system, the MCU executes code sequentially through a `while(1)` loop, essentially running a single task.
-- **Pseudo-multitasking**:
-  Simulating multitasking through interrupts and state machines. For example:
+-   **Single-task Sequential Execution**:
+    In simple systems without an operating system, the MCU executes code sequentially through a `while(1)` loop, essentially running a single task.
+-   **Pseudo-multitasking**:
+    Simulating multitasking through interrupts and state machines. For example:
     1. **Interrupt Service Routine (ISR)**: Handles high-priority tasks (such as button detection, communication reception).
     2. **State Machine in Main Loop**: Time-slices processing of multiple tasks (such as display refresh, sensor data acquisition). **Still single-threaded**, but logically divided into multiple tasks.
 
@@ -19,16 +19,16 @@ Embedded systems are widely used in various devices, most of which have only one
 
 ## 2. Using Real-time Operating Systems (RTOS)
 
-- **Multitasking Concurrency**:
-  RTOSs (such as FreeRTOS, uC/OS, ThreadX) allow multiple tasks (threads) to be scheduled concurrently on a single-core MCU through **time slicing** or **priority preemption**.
+-   **Multitasking Concurrency**:
+    RTOSs (such as FreeRTOS, uC/OS, ThreadX) allow multiple tasks (threads) to be scheduled concurrently on a single-core MCU through **time slicing** or **priority preemption**.
 
 ---
 
 ## 3. Typical Scenario Examples
 
-- **Without RTOS**: Logically divided into multiple functional modules but physically runs as a single thread.
-- **With RTOS**: STM32F4 + FreeRTOS can stably run 5~20 tasks (depending on task resource requirements).
-- **High-performance MCU**: STM32H7 dual-core can handle two high-load tasks in parallel, supplemented by multiple low-priority tasks.
+-   **Without RTOS**: Logically divided into multiple functional modules but physically runs as a single thread.
+-   **With RTOS**: STM32F4 + FreeRTOS can stably run 5~20 tasks (depending on task resource requirements).
+-   **High-performance MCU**: STM32H7 dual-core can handle two high-load tasks in parallel, supplemented by multiple low-priority tasks.
 
 ---
 
@@ -42,10 +42,10 @@ The project can directly use its scheduler and communication mechanisms. However
 
 Features:
 
-- Supports task management, semaphores, queues, and more.
-- Optimized for resource-constrained devices.
-- Provides extensive documentation and community support.
-- STM32 Support: FreeRTOS provides support for STM32 and integrates FreeRTOS configuration options in the STM32CubeMX tool, facilitating rapid development.
+-   Supports task management, semaphores, queues, and more.
+-   Optimized for resource-constrained devices.
+-   Provides extensive documentation and community support.
+-   STM32 Support: FreeRTOS provides support for STM32 and integrates FreeRTOS configuration options in the STM32CubeMX tool, facilitating rapid development.
 
 ---
 
@@ -55,9 +55,9 @@ Zephyr is an extensible small real-time operating system suitable for resource-c
 
 Features:
 
-- Supports multiple architectures, including ARM Cortex-M.
-- Built-in support for multiple wireless technologies such as Bluetooth and WiFi.
-- STM32 Support: Zephyr supports STM32 series microcontrollers, making it suitable for applications requiring complex network functions.
+-   Supports multiple architectures, including ARM Cortex-M.
+-   Built-in support for multiple wireless technologies such as Bluetooth and WiFi.
+-   STM32 Support: Zephyr supports STM32 series microcontrollers, making it suitable for applications requiring complex network functions.
 
 ---
 
@@ -67,9 +67,9 @@ ThreadX is also a real-time operating system.
 
 Features:
 
-- Extremely low interrupt latency and fast task switching.
-- Includes middleware components such as file systems and USB support.
-- Provides detailed documentation and technical support.
+-   Extremely low interrupt latency and fast task switching.
+-   Includes middleware components such as file systems and USB support.
+-   Provides detailed documentation and technical support.
 
 ---
 
@@ -79,10 +79,10 @@ CMSIS-RTOS V2 is a standard API provided by ARM to simplify the porting of RTOS 
 
 Features:
 
-- Standardized APIs make code easier to port.
-- Supports the latest ARM architecture.
-- Seamlessly integrates with Keil MDK.
-- STM32 Support: CMSIS-RTOS V2 is designed for ARM architecture, thus naturally supporting STM32 series microcontrollers.
+-   Standardized APIs make code easier to port.
+-   Supports the latest ARM architecture.
+-   Seamlessly integrates with Keil MDK.
+-   STM32 Support: CMSIS-RTOS V2 is designed for ARM architecture, thus naturally supporting STM32 series microcontrollers.
 
 ---
 

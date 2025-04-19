@@ -13,16 +13,16 @@ int signew(uint flag, int *sid)
 {
     int newsig = -1;
 
-    for(int i = 0; i < MAX_SIGNAL_ITEM; ++i)
+    for (int i = 0; i < MAX_SIGNAL_ITEM; ++i)
     {
-        if(siglist[i].status == SIG_EMPTY)
+        if (siglist[i].status == SIG_EMPTY)
         {
             newsig = i;
             break;
         }
     }
 
-    if(newsig == -1)
+    if (newsig == -1)
     {
         return STATUS_NOT_IMPLEMENTED;
     }
@@ -37,7 +37,7 @@ int signew(uint flag, int *sid)
 
 int sigclose(int sig)
 {
-    if(INVALID_SIGNAL(sig))
+    if (INVALID_SIGNAL(sig))
     {
         return STATUS_INVALID_ID;
     }
@@ -48,12 +48,12 @@ int sigclose(int sig)
 
 int sigset(int sig, int s)
 {
-    if(INVALID_SIGNAL(sig))
+    if (INVALID_SIGNAL(sig))
     {
         return STATUS_INVALID_ID;
     }
 
-    if(s == SIG_EMPTY)
+    if (s == SIG_EMPTY)
     {
         return STATUS_INVALID_PARAMETER;
     }

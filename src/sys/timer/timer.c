@@ -15,7 +15,7 @@ uint ticklow = 0, tickhigh = 0;
 void timer1ms()
 {
     ++ticklow;
-    if(ticklow == 0)
+    if (ticklow == 0)
     {
         ++tickhigh;
     }

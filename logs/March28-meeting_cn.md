@@ -1,4 +1,4 @@
-# 3月28日会议纪要
+# 3 月 28 日会议纪要
 
 [中文](March28-meeting_cn.md) | [English](March28-meeting.md)
 
