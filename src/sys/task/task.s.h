@@ -12,8 +12,7 @@ task.s.h - System header for task manipulation
 
 #include "../../uinc/task.u.h"
 
-// For waiting for signals
-int tsetsigwait(int pid, int sig);
-int tdelwait(int pid);
+// For modifying signals
+void _waitsig();
 
 #endif

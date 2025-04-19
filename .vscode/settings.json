@@ -2,6 +2,8 @@
     "files.associations": {
         "task.h": "c",
         "global.h": "c",
-        "signal.u.h": "c"
+        "signal.u.h": "c",
+        "task.u.h": "c",
+        "timer.u.h": "c"
     }
 }

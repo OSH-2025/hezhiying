@@ -12,6 +12,11 @@ task.c - task manipulation
 
 int exec(entryproc p, void *param, const startinf *si)
 {
+    if (PTRWRONG(si))
+    {
+        return STATUS_INVALID_PARAMETER;
+    }
+
     // Find an empty slot
     int emptyslot = -1;
 

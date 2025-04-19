@@ -11,7 +11,8 @@ timer.h - Internal header for system timer
 #define _TIMER_H
 
 #include "../global.h"
+#include "../../uinc/timer.u.h"
 
-extern uint ticklow, tickhigh;
+extern tick uptime;
 
 #endif

@@ -38,7 +38,7 @@ sys/task.c (task subsystem impl.)      |
 -   禁止使用 C++ 功能
 -   系统对象，即使只需要一个成员，也必须写成结构体
 -   用户 API 前面必须有 `LRT_UAPI` (例如 `LRT_UAPI int exec(entryproc p, void* param, const startinf* si);`)
--   不允许直接操作其他子系统的对象和内部状态，必须征得另一个子系统作者同意后，使用对方提供的 `LRT_SAPI` 标记的系统 API
+-   不允许直接操作其他子系统的对象和内部状态，必须征得另一个子系统作者同意后，使用对方提供的 `LRT_SAPI` 标记的系统 API，这些 API 用 `_` 开头
 -   一般不使用枚举 (enum)
 
 ## Formatting

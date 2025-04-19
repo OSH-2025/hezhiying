@@ -10,7 +10,7 @@
 #define SIG_FLAG_DEFAULT 0
 #define SIG_FLAG_AUTORESET MAKEBIT(1)
 
-LRT_UAPI int signew(uint flag, int *sid);
+LRT_UAPI int signew(uint flag, int *sig);
 LRT_UAPI int sigclose(int sig);
 LRT_UAPI int sigset(int sig, int status);
 LRT_UAPI int waitsig(int sig, int timeout);

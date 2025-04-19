@@ -9,8 +9,13 @@
 
 signl siglist[MAX_SIGNAL_ITEM];
 
-int signew(uint flag, int *sid)
+int signew(uint flag, int *sig)
 {
+    if (PTRWRONG(sid))
+    {
+        return STATUS_INVALID_PARAMETER;
+    }
+
     int newsig = -1;
 
     for (int i = 0; i < MAX_SIGNAL_ITEM; ++i)
