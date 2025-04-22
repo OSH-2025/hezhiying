@@ -65,7 +65,17 @@
 
 -   `int sysinfo(sysinf* info)` = 获取系统信息
 
--   `int tick(unsigned int* tl, unsigned int* th)` = 获取时钟计数器的值
+-   `int now(tick *t);` = 获取 tick 计数器的值
+
+-   `int timeadd(tick *t, timespan *span);` = 时间相加
+
+-   `int timetospan(tick *t, timespan *span);` = 时间转换为 span
+
+-   `int timesub(tick *ta, tick *tb, timespan *span);` = 时间相减
+
+-   `int timeneg(timespan *t);` = 时间段取相反数
+
+-   `int timetest(timespan *t, int *result);` = 判断 timespan 是正、负还是零
 
 ## Communication 数据包通信 (UDP like)
 
