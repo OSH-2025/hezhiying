@@ -67,20 +67,10 @@
 
 -   `int tick(unsigned int* tl, unsigned int* th)` = 获取时钟计数器的值
 
-## Communication 流式通信
+## Communication 数据包通信 (UDP like)
 
--   `int comopen(int uid, int pid, int flag, comm** f)` = 建立到 (uid = 处理器 ID, pid = 过程 ID) 的通信连接。传入 uid = -1 表示本处理器
+-   `int comsend(int uid, int port, void* buf, int len)` 发送 [buf, buf + len) 到目标
 
--   `int comclose(comm** f)` = 关闭 f
+-   `int comrecv(int port, void* buf, int len, int* wlen)` 阻塞式接收
 
--   `int comsend(comm** f, void* buf, int len)` 发送 [buf, buf + len) 到目标
-
--   `int comrecv(comm** f, void* buf, int len, int* wlen)` 阻塞式接收
-
--   `int comcp(comm** f, void* buf, int len, int* wlen)` 复制式接收 (不从缓冲区中删去数据)
-
--   `int comerase(comm** f, int len)` 从缓冲区中删去数据
-
--   `int comavail(comm** f, int* len)` 检查接收到了未读取的多少数据
-
--   `int comcheck(comm** f)` 检查连接是否正常
+-   `int comcheck(int uid)` 检查连接是否正常
