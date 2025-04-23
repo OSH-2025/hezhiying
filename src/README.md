@@ -17,7 +17,7 @@ sys/task.c (task subsystem impl.)      |
 
 ```
 
-## Coding rules
+## Coding guidelines
 
 -   每个子系统 (假设名称是 X) 只能包括：
     -   `sys/X/X.c` -- 主要的实现
@@ -29,10 +29,11 @@ sys/task.c (task subsystem impl.)      |
 -   需要展示给用户的东西写在 `*.u.h` 里面，内部的东西写在 `*.h` 里面，`*.h` 里面必须 include `*.u.h`
 -   头文件中代码前必须使用 `#ifndef _<头文件名>_H` 和 `#define _<头文件名>_H`，代码后必须使用 `#endif`，禁止使用 `#pragma once`
 -   返回 `int` 的用户 API 永远是 `STATUS_***` 的宏定义之一 (在 `global.h`)。优先使用已有的状态代码，如果需要新增，则加到尾部
--   未实现的函数永远只返回 `STATUS_NOT_IMPLEMENTED`，未实现的宏定义后面加上 NOTIMPL (只要使用这些宏定义必定导致编译失败)
+-   未实现的函数永远只返回 `STATUS_NOT_IMPLEMENTED`，未实现的宏定义后面加上 NOTIMPL (只要使用这个宏定义必定导致编译失败)
 -   所有常量 (除了数组下标开始为 `0` 这类非常显然的)，都必须使用位于 `<子系统名称>.h` 中定义的宏
 -   常量宏定义必须使用全部大写的名称
 -   全局列表 X 的大小只能由 `MAX_X_ITEM`的宏定义，并使用 `IDWRONG(x, X)` 这样的写法进行检查 (`x` 是传入的序号)
+-   用户传入的指针只能是用户地址空间上的指针，请使用 `PTRWRONG(X)` 检查
 -   对于用户传入的参数必须进行检查，对有问题的输入参数必须只返回 `STATUS_INVALID_PARAMETER`，不能做其他任何事情
 -   禁止使用 `malloc` 和 `free`
 -   禁止使用 C++ 功能

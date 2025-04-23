@@ -11,7 +11,7 @@ signl siglist[MAX_SIGNAL_ITEM];
 
 int signew(uint flag, int *sig)
 {
-    if (PTRWRONG(sid))
+    if (PTRWRONG(sig))
     {
         return STATUS_INVALID_PARAMETER;
     }
@@ -35,7 +35,7 @@ int signew(uint flag, int *sig)
     siglist[newsig].status = SIG_INACTIVE;
     siglist[newsig].flag = flag;
 
-    *sid = newsig;
+    *sig = newsig;
 
     return STATUS_SUCCESS;
 }
