@@ -2,8 +2,8 @@
 // Created by Administrator on 25-4-17.
 //
 
-#ifndef COMMUNICATION_H
-#define COMMUNICATION_H
+#ifndef _COMMUNICATION_H
+#define _COMMUNICATION_H
 
 #endif // COMMUNICATION_H
 #include <stdint.h>
