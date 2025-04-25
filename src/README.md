@@ -41,6 +41,7 @@ sys/task.c (task subsystem impl.)      |
 -   用户 API 前面必须有 `LRT_UAPI` (例如 `LRT_UAPI int exec(entryproc p, void* param, const startinf* si);`)
 -   不允许直接操作其他子系统的对象和内部状态，必须征得另一个子系统作者同意后，使用对方提供的 `LRT_SAPI` 标记的系统 API，这些 API 用 `_` 开头
 -   一般不使用枚举 (enum)
+-   API 内部禁止使用可变大小的循环，即 API 函数的运行时间需要是常数。如果涉及等待，应该标记 task 为等待后 yield。
 
 ## Formatting
 

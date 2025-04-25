@@ -6,6 +6,7 @@
 
 #include "../timer/timer.h"
 #include "../task/task.h"
+#include "../obj/obj.h"
 
 signl siglist[MAX_SIGNAL_ITEM];
 
@@ -35,9 +36,7 @@ int signew(uint flag, int *sig)
     siglist[newsig].status = SIG_INACTIVE;
     siglist[newsig].flag = flag;
 
-    *sig = newsig;
-
-    return STATUS_SUCCESS;
+    return _xnewobj(newsig, OBJTYPE_SIGNAL, sig); // TODO: what if handle table is full? the signal is created but there's no way to access it.
 }
 
 int sigclose(int sig)
