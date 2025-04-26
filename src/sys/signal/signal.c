@@ -33,20 +33,11 @@ int signew(uint flag, int *sig)
         return STATUS_RESOURCE_INSUFFICIENT;
     }
 
-    int htask = -1;
-    int rh = _xnewobj(newsig, OBJTYPE_SIGNAL, htask);
+    siglist[newsig].status = SIG_INACTIVE;
+    siglist[newsig].flag = flag;
 
-    if (rh == STATUS_SUCCESS)
-    {
-        // Actually change the system state
-        siglist[newsig].status = SIG_INACTIVE;
-        siglist[newsig].flag = flag;
-
-        *sig = rh;
-        return STATUS_SUCCESS;
-    }
-
-    return rh;
+    *sig = newsig;
+    return STATUS_SUCCESS;
 }
 
 int sigclose(int sig)
