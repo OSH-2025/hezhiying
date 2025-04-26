@@ -7,28 +7,16 @@ timer.u.h - User header for system timing
 
 */
 
-#ifndef _TASK_U_H
-#define _TASK_U_H
+#ifndef _TIMER_U_H
+#define _TIMER_U_H
 
 #include "../sys/global.h"
+#include <stdint.h>
 
-typedef struct
-{
-    uint ticklow;
-    uint tickhigh;
-} tick;
+typedef uint64_t tick;
 
-typedef struct
-{
-    uint spanlow;
-    int spanhigh;
-} timespan;
+typedef int64_t timespan;
 
 int now(tick *t);
-
-int timeadd(tick *t, timespan *span);
-int timesub(tick *ta, tick *tb, timespan *span);
-int timeneg(timespan *t);
-int timetest(timespan *t, int *result);
 
 #endif

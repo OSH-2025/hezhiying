@@ -15,7 +15,7 @@
 
 typedef struct
 {
-    int status;
+    volatile int status;
     uint flag;
 } signl;
 

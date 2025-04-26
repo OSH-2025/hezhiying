@@ -44,8 +44,13 @@ typedef unsigned int uint; // By default, 32 bits.
 #define STATUS_INVALID_ID -3            // Invalid object ID
 #define STATUS_INCORRECT_STATUS -4      // Incorrect status: operation specified and system object status
 #define STATUS_INVALID_PARAMETER -5     // Incorrect parameter
+#define STATUS_WAIT_TIMEOUT -8          // Wait function timeout
+
+/*
+// Reserved status
 #define STATUS_INVALID_HANDLE -6        // Invalid handle
-#define STATUS_INCORRECT_HANDLE_TYPE    // Incorrect handle -> type
+#define STATUS_INCORRECT_HANDLE_TYPE -7 // Incorrect handle -> type
+*/
 
 // Boolean
 /*
