@@ -30,13 +30,23 @@ int signew(uint flag, int *sig)
 
     if (newsig == -1)
     {
-        return STATUS_NOT_IMPLEMENTED;
+        return STATUS_RESOURCE_INSUFFICIENT;
     }
 
-    siglist[newsig].status = SIG_INACTIVE;
-    siglist[newsig].flag = flag;
+    int htask = -1;
+    int rh = _xnewobj(newsig, OBJTYPE_SIGNAL, htask);
 
-    return _xnewobj(newsig, OBJTYPE_SIGNAL, sig); // TODO: what if handle table is full? the signal is created but there's no way to access it.
+    if (rh == STATUS_SUCCESS)
+    {
+        // Actually change the system state
+        siglist[newsig].status = SIG_INACTIVE;
+        siglist[newsig].flag = flag;
+
+        *sig = rh;
+        return STATUS_SUCCESS;
+    }
+
+    return rh;
 }
 
 int sigclose(int sig)
