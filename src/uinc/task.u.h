@@ -37,4 +37,7 @@ LRT_UAPI int exec(entryproc p, void *param, const startinf *si);
 // Max number of tasks
 #define MAX_TASK_ITEM 100
 
+// Switch to another task (giving up remaining timeslice)
+LRT_UAPI int yield();
+
 #endif

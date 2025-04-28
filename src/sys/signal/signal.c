@@ -6,7 +6,6 @@
 
 #include "../timer/timer.h"
 #include "../task/task.h"
-#include "../obj/obj.h"
 
 signl siglist[MAX_SIGNAL_ITEM];
 
@@ -30,13 +29,14 @@ int signew(uint flag, int *sig)
 
     if (newsig == -1)
     {
-        return STATUS_NOT_IMPLEMENTED;
+        return STATUS_RESOURCE_INSUFFICIENT;
     }
 
     siglist[newsig].status = SIG_INACTIVE;
     siglist[newsig].flag = flag;
 
-    return _xnewobj(newsig, OBJTYPE_SIGNAL, sig); // TODO: what if handle table is full? the signal is created but there's no way to access it.
+    *sig = newsig;
+    return STATUS_SUCCESS;
 }
 
 int sigclose(int sig)
@@ -66,19 +66,44 @@ int sigset(int sig, int s)
     return STATUS_SUCCESS;
 }
 
-int waitsig(int sig, int timeout)
+int waitlo(int sig, int timeout)
 {
-    // Should be implemented mainly in task subsystem
-    return STATUS_NOT_IMPLEMENTED;
+    tick begin;
+    int rv;
+
+    if ((rv = now(&begin)) != STATUS_SUCCESS)
+    {
+        return rv;
+    }
+
+    while (true)
+    {
+        tick tnow;
+        now(&tnow);
+
+        if (tnow - begin > timeout)
+        {
+            return STATUS_WAIT_TIMEOUT;
+        }
+
+        int status;
+        if ((rv = readsig(sig, &status)) != STATUS_SUCCESS)
+        {
+            return rv;
+        }
+
+        if (status != SIG_INACTIVE)
+        {
+            return STATUS_SUCCESS;
+        }
+
+        yield();
+    }
 }
 
-int waitany(const int *sig, int nsig, int timeout)
+int readsig(int sig, int *status)
 {
-    // Should be implemented mainly in task subsystem
-    return STATUS_NOT_IMPLEMENTED;
-}
+    *status = siglist[sig].status;
 
-int readsig(int sig)
-{
-    return siglist[sig].status;
+    return STATUS_SUCCESS;
 }
