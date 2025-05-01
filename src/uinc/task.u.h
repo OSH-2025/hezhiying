@@ -39,5 +39,9 @@ LRT_UAPI int exec(entryproc p, void *param, const startinf *si);
 
 // Switch to another task (giving up remaining timeslice)
 LRT_UAPI int yield();
+LRT_UAPI int swtch(int pid);
+
+// Get current PID
+LRT_UAPI int cpid(int *pid);
 
 #endif

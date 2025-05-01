@@ -17,29 +17,11 @@ task.h - Internal header for task manipulation
 
 typedef struct
 {
-    // Manually saved
-    uint r4;
-    uint r5;
-    uint r6;
-    uint r7;
-    uint r8;
-    uint r9;
-    uint r10;
-    uint r11;
-
-    // Automatically saved on exception
-    uint r0;
-    uint r1;
-    uint r2;
-    uint r3;
-    uint r12;
-    uint lr;
-    uint pc;
-    uint xpsr;
-
-    // Additional state
-    uint psp;
-    uint control;
+    uint32_t r[13]; // R0 - R12
+    uint32_t sp;    // Stack Pointer
+    uint32_t lr;    // Link Register
+    uint32_t pc;    // Program Counter
+    uint32_t xpsr;  // Program Status Register
 } context;
 
 #define WAIT_NOWAIT 0
@@ -92,5 +74,9 @@ typedef struct
 } task;
 
 extern task tsklist[MAX_TASK_ITEM];
+
+// Context switch assembly routines
+__attribute__((naked)) extern void ctxsave(context *ctx);
+__attribute__((naked)) extern void ctxrestore(context *ctx);
 
 #endif

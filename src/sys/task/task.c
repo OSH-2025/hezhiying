@@ -10,6 +10,9 @@ task.c - task manipulation
 
 #include "task.h"
 
+task tsklist[MAX_TASK_ITEM];
+int currentpid = -1;
+
 int exec(entryproc p, void *param, const startinf *si)
 {
     if (PTRWRONG(si))
@@ -39,4 +42,16 @@ int exec(entryproc p, void *param, const startinf *si)
     // TODO: not implemented.
 
     return STATUS_NOT_IMPLEMENTED;
+}
+
+int swtch(int npid)
+{
+    // Save up current context
+}
+
+int cpid(int *pid)
+{
+    *pid = currentpid;
+
+    return STATUS_SUCCESS;
 }
