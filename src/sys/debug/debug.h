@@ -13,24 +13,25 @@ debug.h - Internal header for debug information
 #include "../global.h"
 #include "../../uinc/debug.u.h"
 
+// log structure for system
+typedef struct
+{
+    int8_t level;              // log level
+    char message[MAX_LOG_MSG]; // log message
+} sys_log_info;
+
+// log list for system
+extern sys_log_info sys_log_list[MAX_LOG_ITEM];
+
 // System log level(default: LOG_LEVEL_FATAL)
-extern uint8_t sys_log_level; // could be changed by logset()
+extern int8_t sys_log_level; // could be changed by logset()
 
-#ifdef DEBUG_ENABLED
-#define ASSERT(condition, msg)                                  \
-    if (!(condition))                                           \
-    {                                                           \
-        logmsg(LOG_LEVEL_FATAL, "Assertion failed: %s\n", msg); \
-        while (1)                                               \
-        {                                                       \
-        } /* Infinite loop to halt execution */                 \
-    }
-#else
-#define ASSERT(condition, msg) ((void)0) // No-op if DEBUG_ENABLED is not defined
-#endif
+// system api
+LRT_SAPI int _debug_init(); // initialize debug system
 
-LRT_SAPI void _debug_init();                              // Initialize debug system
-LRT_SAPI int _debug_log(int level, const char *fmt, ...); // Log message
-LRT_SAPI void _assert(int condition, const char *msg);     // Assert function
+LRT_SAPI int _log(int8_t level, const char *msg);      // system log message
+LRT_SAPI int _update_memory_stat(int delta);           // update memory statistics
+LRT_SAPI int _update_perf_stat(bool is_idle, timespan time_spent); // update performance statistics
+LRT_SAPI void _assert(int condition, const char *msg); // assert function
 
 #endif
