@@ -261,6 +261,94 @@ int _update_perf_stat(bool is_idle, timespan time_spent)
     return STATUS_SUCCESS;
 }
 
+#include <stdarg.h>
+
+// Helper function to print a number in the specified base
+static int print_number(unsigned int num, int base, int is_signed, int *count)
+{
+    char buf[32]; // Enough for 32-bit numbers in binary
+    int len = 0;
+    unsigned int n = num;
+
+    // Handle negative numbers for any base when signed
+    if (is_signed && (int)num < 0)
+    {
+        dputchar('-');
+        n = -(int)num;
+        (*count)++;
+    }
+
+    // Convert number to string in given base
+    do
+    {
+        int digit = n % base;
+        buf[len++] = digit < 10 ? '0' + digit : 'a' + (digit - 10);
+        n /= base;
+    } while (n);
+
+    // Output digits in reverse order
+    while (len--)
+    {
+        dputchar(buf[len]);
+        (*count)++;
+    }
+
+    return *count;
+}
+
+int dprintf(const char *fmt, ...)
+{
+    va_list args;
+    int count = 0;
+    char c, *s;
+    int i;
+
+    va_start(args, fmt);
+    while ((c = *fmt++))
+    {
+        if (c != '%')
+        {
+            dputchar(c);
+            count++;
+            continue;
+        }
+        c = *fmt++;
+        switch (c)
+        {
+        case 'd':
+            i = va_arg(args, int);
+            print_number((unsigned int)i, 10, 1, &count);
+            break;
+        case 'u':
+            i = va_arg(args, unsigned int);
+            print_number(i, 10, 0, &count);
+            break;
+        case 'x':
+            i = va_arg(args, unsigned int);
+            print_number(i, 16, 1, &count);
+            break;
+        case 's':
+            s = va_arg(args, char *);
+            while (*s)
+            {
+                dputchar(*s++);
+                count++;
+            }
+            break;
+        case 'c':
+            dputchar((char)va_arg(args, int));
+            count++;
+            break;
+        default:
+            dputchar(c);
+            count++;
+            break;
+        }
+    }
+    va_end(args);
+    return count;
+}
+
 // // User API: get task debug information
 // int taskinfo(int pid, task_debug_info *info)
 // {

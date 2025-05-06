@@ -12,6 +12,7 @@ debug.h - Internal header for debug information
 
 #include "../global.h"
 #include "../../uinc/debug.u.h"
+#include <stdarg.h>
 
 // log structure for system
 typedef struct
@@ -29,9 +30,13 @@ extern int8_t sys_log_level; // could be changed by logset()
 // system api
 LRT_SAPI int _debug_init(); // initialize debug system
 
-LRT_SAPI int _log(int8_t level, const char *msg);      // system log message
-LRT_SAPI int _update_memory_stat(int delta);           // update memory statistics
+LRT_SAPI int _log(int8_t level, const char *msg);                  // system log message
+LRT_SAPI int _update_memory_stat(int delta);                       // update memory statistics
 LRT_SAPI int _update_perf_stat(bool is_idle, timespan time_spent); // update performance statistics
-LRT_SAPI void _assert(int condition, const char *msg); // assert function
+LRT_SAPI void _assert(int condition, const char *msg);             // assert function
+
+LRT_UAPI int dprintf(const char *fmt, ...);
+
+LRT_SAPI int dputchar(const char ch);
 
 #endif
