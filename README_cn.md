@@ -4,6 +4,9 @@
 
 ![logo](docs/media/pict/logo_test.png)
 
+## 关于 GitLab
+由于网络连接问题，活跃开发在 [LUG GitLab](https://git.lug.ustc.edu.cn/hzyosh/lightrt) 上进行，此处的 `lightrt` 是那个 Git 仓库内容的拷贝。
+
 ## 项目成员
 
 -   [位文康](https://github.com/jianyingzhihe)

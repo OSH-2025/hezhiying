@@ -1,0 +1,1 @@
+int wait_signal_id;

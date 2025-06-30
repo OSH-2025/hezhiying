@@ -1,0 +1,16 @@
+firmware.bin
+firmware.elf
+libopencm3/
+renode/
+svcc
+generated.*
+.vscode/
+*.o
+core
+lightrt/user/syscall.c
+lightrt/user/syscall.h
+lightrt/svc.c
+lightrt/svc.h
+simulate/periph.dll
+.renode_libs_fetched
+smserver/smsvc.exe

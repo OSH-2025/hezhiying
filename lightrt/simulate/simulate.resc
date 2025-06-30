@@ -1,0 +1,14 @@
+using sysbus
+
+mach create "stm32f103"
+
+# Load the platform with LED connected
+machine LoadPlatformDescription @simulate/stm32f103.repl
+
+# Load the firmware
+sysbus LoadELF @firmware.elf true
+
+# Optional: view serial UART output
+showAnalyzer sysbus.usart1
+
+machine StartGdbServer 19000

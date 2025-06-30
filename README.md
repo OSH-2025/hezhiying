@@ -4,6 +4,9 @@
 
 ![logo](docs/media/pict/logo_test.png)
 
+## About GitLab
+Due to the network connectivity issues, the active development is mainly on [LUG GitLab](https://git.lug.ustc.edu.cn/hzyosh/lightrt). The path `lightrt` here is a copy of that Git repository.
+
 ## Team Members
 
 -   [Weikang Wei](https://github.com/jianyingzhihe)
