@@ -4,7 +4,7 @@
 
 ## Team Members
 
--   [Weikang Wei](https://github.com/jianyingzhihe)
+-   [Wenkang Wei](https://github.com/jianyingzhihe)
 -   [Jiahong Luo](https://github.com/ustcljh)
 -   [Zhuo Cui](https://github.com/crosaa)
 -   [Yanzhen Guo](https://github.com/yzguo)
