@@ -4,13 +4,21 @@ void uart_write(const char *str)
 {
     while (*str)
     {
-        usart_send_blocking(USART1, *str++);
+        uart_putchar(*str++);
     }
 }
 
 void uart_putchar(int ch)
 {
-    usart_send_blocking(USART1, ch);
+    if (ch == '\n')
+    {
+        usart_send_blocking(USART1, '\r');
+        usart_send_blocking(USART1, '\n');
+    }
+    else
+    {
+        usart_send_blocking(USART1, ch);
+    }
 }
 
 void uart_setup()
@@ -32,6 +40,59 @@ void uart_setup()
     usart_set_parity(USART1, USART_PARITY_NONE);
     usart_set_flow_control(USART1, USART_FLOWCONTROL_NONE);
     usart_enable(USART1);
+
+    // Allow RX interrupt
+    usart_enable_rx_interrupt(USART1);
+
+    /* Enable USART1 interrupt in NVIC */
+    nvic_enable_irq(NVIC_USART1_IRQ);
+}
+
+void uart_cancel_wait()
+{
+    uart_wait_taskid = -1;
+}
+
+void usart1_isr(void)
+{
+    // uart_write("RECV\n");
+
+    /* Check if RX not empty flag is set */
+    if (usart_get_flag(USART1, USART_SR_RXNE))
+    {
+        char ch = usart_recv(USART1);
+        // uart_putchar(ch);
+
+        if (uart_wait_taskid != -1 && tasks[uart_wait_taskid].state == TASK_WAIT)
+        {
+            tcb_t *ptask = &tasks[uart_wait_taskid];
+
+            if (ptask->wait_area.wait_uart_pbuf < ptask->wait_area.wait_uart_ebuf)
+            {
+                // uart_printf("==== UART pbuf = %x ebuf = %x.\n", ptask->wait_area.wait_uart_pbuf, ptask->wait_area.wait_uart_ebuf);
+                *(ptask->wait_area.wait_uart_pbuf) = ch;
+                ptask->wait_area.wait_uart_pbuf++;
+                // uart_printf("#### UART pbuf = %x ebuf = %x.\n", ptask->wait_area.wait_uart_pbuf, ptask->wait_area.wait_uart_ebuf);
+
+                if (ptask->wait_area.wait_uart_pbuf == ptask->wait_area.wait_uart_ebuf)
+                {
+                    // uart_printf("UART satisfied.\n");
+
+                    // Read finished.
+                    uart_wait_taskid = -1;
+                    ptask->state = TASK_NORMAL;
+                }
+            }
+            else
+            {
+                // Bad bptr -- should be return to normal on last read or 0 size buffer given.
+                // This could be used to trigger the task but read nothing -- the reading is done by the thread.
+                // Add immediate yield (to that task) if fast response is required.
+                uart_wait_taskid = -1;
+                ptask->state = TASK_NORMAL;
+            }
+        }
+    }
 }
 
 void printui(unsigned int num, int base)

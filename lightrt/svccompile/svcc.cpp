@@ -29,7 +29,7 @@ int main()
 {
     printf("This is SVC routine compiler, built " __DATE__ ", " __TIME__ "\n");
 
-    FILE *svcDefFile = fopen("lightrt/svc.def", "r");
+    FILE *svcDefFile = fopen("lightrt/syscall/svc.def", "r");
 
     int nSvcs = 0;
     fscanf(svcDefFile, "%d", &nSvcs);
@@ -94,9 +94,10 @@ int main()
     printf("Generating SVC call user header...\n");
     FILE *userHeaderFile = fopen("lightrt/user/syscall.h", "w");
 
+    fprintf(userHeaderFile, "#include \"../lightrt.h\"\n");
     fprintf(userHeaderFile, "#ifndef _U_SYSCALL_H\n#define _U_SYSCALL_H\n");
     fprintf(userHeaderFile, "/* This file is generated using SVC compiler. DO NOT DIRECTLY MODIFY. Edit svc.def file and run svcc instead. */\n");
-    fprintf(userHeaderFile, "#include \"../lightrt.h\"\n");
+
     for (auto &routine : routines)
     {
         fprintf(userHeaderFile, "/* SVC Call %d */ __attribute__((naked)) uint32_t lrt_%s (", routine.id, routine.name.c_str());
@@ -163,12 +164,13 @@ int main()
     fclose(userSourceFile);
 
     printf("Generating SVC call kernel mode header...\n");
-    FILE *kernelHeaderFile = fopen("lightrt/svc.h", "w");
+    FILE *kernelHeaderFile = fopen("lightrt/syscall/svc.h", "w");
 
+    fprintf(kernelHeaderFile, "#include \"../lightrt.h\"\n");
     fprintf(kernelHeaderFile, "#ifndef _SVC_H\n#define _SVC_H\n");
     fprintf(kernelHeaderFile, "/* This file is generated using SVC compiler. DO NOT DIRECTLY MODIFY. Edit svc.def file and run svcc instead. */\n");
     fprintf(kernelHeaderFile, "#include <stdint.h>\n");
-    fprintf(kernelHeaderFile, "#include \"lightrt.h\"\n");
+
     for (auto &routine : routines)
     {
         fprintf(kernelHeaderFile, "/* SVC Implement %d */ uint32_t svc_%s (", routine.id, routine.name.c_str());
@@ -186,7 +188,7 @@ int main()
     fclose(kernelHeaderFile);
 
     printf("Generating SVC call kernel mode source...\n");
-    FILE *kernelSourceFile = fopen("lightrt/svc.c", "w");
+    FILE *kernelSourceFile = fopen("lightrt/syscall/svc.c", "w");
 
     fprintf(kernelSourceFile, "/* This file is generated using SVC compiler. DO NOT DIRECTLY MODIFY. Edit svc.def file and run svcc instead. */\n");
     fprintf(kernelSourceFile, "#include <stdint.h>\n");

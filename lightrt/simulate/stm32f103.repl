@@ -1,4 +1,4 @@
-extmem: Memory.ExternalMemory @ sysbus <0x60000000, +0x1000>
+extmem: Memory.ExternalMemory @ sysbus <0x60000000, +0x100f>
     size: 0x1000
 
 sram: Memory.MappedMemory @ sysbus 0x20000000
@@ -86,3 +86,6 @@ tim2: Timers.STM32_Timer @ sysbus 0x40000000
     frequency: 72000000
     initialLimit: 0xFFFF
     -> nvic@28
+
+dma: DMA.STM32F103_DMA @ sysbus 0x40020000
+    bus: sysbus

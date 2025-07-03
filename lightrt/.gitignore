@@ -14,3 +14,4 @@ lightrt/svc.h
 simulate/periph.dll
 .renode_libs_fetched
 smserver/smsvc.exe
+smserver/smsvc.exe.mdb

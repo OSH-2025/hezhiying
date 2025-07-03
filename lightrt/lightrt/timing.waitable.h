@@ -1,1 +1,0 @@
-int wait_due_time;

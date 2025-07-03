@@ -1354,6 +1354,7 @@
     <Compile Include="Emulator/Peripherals/Peripherals/I2C/SAM4S_TWI.cs" />
     <Compile Include="Emulator/Peripherals/Peripherals/Memory/GenericI2cEeprom.cs" />
     <Compile Include="../../../../periph/extmem.cs" />
+    <Compile Include="../../../../periph/dma.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Emulator/Main/Utilities/Packets/Packet.cs" />

@@ -2,13 +2,22 @@ using sysbus
 
 mach create "stm32f103"
 
-# Load the platform with LED connected
+# Load the platform
 machine LoadPlatformDescription @simulate/stm32f103.repl
 
 # Load the firmware
+# (do not use ELF as Renode will pre-load segments like .data into memory, instead of (on bare metal) copy by reset handler as software.)
+# We use modified Reset handler to bypass this since BIN file is hard to load.
 sysbus LoadELF @firmware.elf true
+# sysbus LoadBinary @firmware.bin 0x08000000
+
+# cpu SetRegister sp 0x20002000
+# cpu PC 0x08000101
 
 # Optional: view serial UART output
-showAnalyzer sysbus.usart1
+# showAnalyzer sysbus.usart1
+
+emulation CreateServerSocketTerminal 19001 "term"
+term AttachTo sysbus.usart1
 
 machine StartGdbServer 19000

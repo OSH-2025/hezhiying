@@ -1,4 +1,3 @@
-#include "lightrt.h"
 #include "task.h"
 
 tcb_t tasks[MAX_TASKS];
@@ -15,13 +14,35 @@ void sys_tick_handler(void)
     ++tick;
     // uart_printf("SysTick: %d\n", tick);
 
+    int wakeup = 0;
+
     for (int i = 0; i < MAX_TASKS; ++i)
     {
-        if (tasks[i].state == TASK_WAIT && tasks[i].wait_due_time <= tick)
+        if (tasks[i].state == TASK_WAIT)
         {
-            uart_printf("Tick: resuming task %d\n", i);
-            tasks[i].state = TASK_NORMAL;
-            tasks[i].wait_due_time = -1;
+            // uart_printf("Task %d is waiting as %d.\n", i, tasks[i].state);
+            switch (tasks[i].wait_area.which)
+            {
+            case WAIT_TIMING:
+                if (tasks[i].wait_area.wait_due_time <= tick)
+                {
+                    // uart_printf("Tick: resuming task %d\n", i);
+                    tasks[i].state = TASK_NORMAL;
+                    tasks[i].wait_area.wait_due_time = 0;
+
+                    ++wakeup;
+                }
+                break;
+            case WAIT_DMA:
+                if (dma_status()) // Finished
+                {
+                    // uart_printf("Tick: resuming task %d since DMA finished\n", i);
+                    tasks[i].state = TASK_NORMAL;
+
+                    ++wakeup;
+                }
+                break;
+            }
         }
     }
 
@@ -29,7 +50,7 @@ void sys_tick_handler(void)
     SCB_ICSR |= SCB_ICSR_PENDSVSET; // Set PendSV to trigger
 }
 
-void task_create(task_routine task, int id)
+void task_create(task_routine task, void *param, int id)
 {
     // uint32_t *stack_top = tasks[i].stack + STACK_SIZE - 16;
 
@@ -38,14 +59,14 @@ void task_create(task_routine task, int id)
     // Exception stack frame - 8 registers
     sp -= 8; // reserve space for R0-R3, R12, LR, PC, xPSR
 
-    sp[0] = 0x00000000;     // R0
-    sp[1] = 0x01010101;     // R1
-    sp[2] = 0x02020202;     // R2
-    sp[3] = 0x03030303;     // R3
-    sp[4] = 0x12121212;     // R12
-    sp[5] = 0xFFFFFFFD;     // LR (return to thread mode, use PSP)
-    sp[6] = (uint32_t)task; // PC (start address)
-    sp[7] = 0x01000000;     // xPSR (Thumb bit)
+    sp[0] = (uint32_t)param; // R0
+    sp[1] = 0x01010101;      // R1
+    sp[2] = 0x02020202;      // R2
+    sp[3] = 0x03030303;      // R3
+    sp[4] = 0x12121212;      // R12
+    sp[5] = 0xFFFFFFFD;      // LR (return to thread mode, use PSP)
+    sp[6] = (uint32_t)task;  // PC (start address)
+    sp[7] = 0x01000000;      // xPSR (Thumb bit)
 
     // Save R4-R11 context (optional - 8 registers)
     sp -= 8;
@@ -54,8 +75,8 @@ void task_create(task_routine task, int id)
 
     tasks[id].sp = sp;
     tasks[id].state = TASK_NORMAL;
-    tasks[id].wait_due_time = -1;
-    tasks[id].wait_signal_id = -1;
+    tasks[id].wait_area.wait_due_time = -1;
+    tasks[id].wait_area.wait_signal_id = -1;
     tasks[id].prio = 0;
 
     // After this the stack space is
@@ -107,14 +128,23 @@ __attribute__((naked)) void pend_sv_handler(void)
 
 int current_task_id = 0;
 
-int get_next()
+int sched_next()
 {
+    // TODO: add check for no running tasks. (ALL not TASK_NORMAL). This is rarely possible since we assume the task 0 is always while(1).
+
     int next_task = current_task_id;
+
+    if (tasks[current_task_id].state != TASK_NORMAL)
+    {
+        next_task = 0;
+    }
+
     int t = next_task;
     do
     {
-        // uart_printf("Trying task %d: state %d prio %d\n", t, tasks[t].state, tasks[t].prio);
         t = (t + 1) % MAX_TASKS;
+
+        // uart_printf("Trying task %d: state %d prio %d\n", t, tasks[t].state, tasks[t].prio);
         if (tasks[t].state == TASK_NORMAL && tasks[t].prio > tasks[next_task].prio)
         {
             // uart_printf("Selected task %d: state %d prio %d\n", t, tasks[t].state, tasks[t].prio);
@@ -132,13 +162,13 @@ tcb_t *select_next(void)
     int next_task = current_task_id;
     if (yield_source == YIELD_SYSTICK)
     {
-        next_task = get_next();
-        uart_printf("Select %d as next task.\n", next_task);
+        next_task = sched_next();
+        // uart_printf("Select %d as next task.\n", next_task);
     }
     else
     {
         next_task = yield_manual_next;
-        uart_printf("Select %d manually as next task.\n", next_task);
+        // uart_printf("Select %d manually as next task.\n", next_task);
     }
 
     // uart_printf("Switch from task %d to %d, the new task has state %d.\n", current_task_id, next_task, tasks[next_task].state);
@@ -160,6 +190,11 @@ __attribute__((naked)) void task_start_first(uint32_t *sp)
 
 void task_swtch(int nextid)
 {
+    if (nextid == -1)
+    {
+        nextid = sched_next();
+    }
+
     yield_source = YIELD_MANUAL;
     yield_manual_next = nextid;
     SCB_ICSR |= SCB_ICSR_PENDSVSET; // Set PendSV to trigger

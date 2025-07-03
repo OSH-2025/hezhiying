@@ -13,11 +13,11 @@ void signal_active(int id)
 
     for (int i = 0; i < MAX_TASKS; ++i)
     {
-        if (tasks[i].state == TASK_WAIT && tasks[i].wait_signal_id == id)
+        if (tasks[i].state == TASK_WAIT && tasks[i].wait_area.wait_signal_id == id)
         {
             // uart_printf("Resuming %d\n", i);
             tasks[i].state = TASK_NORMAL;
-            tasks[i].wait_signal_id = -1;
+            tasks[i].wait_area.wait_signal_id = -1;
         }
     }
 }

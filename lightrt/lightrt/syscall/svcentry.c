@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "../lightrt.h"
 
 void svcHandler(uint32_t *svc_args);
 

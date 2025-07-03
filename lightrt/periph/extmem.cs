@@ -41,8 +41,6 @@ namespace Antmicro.Renode.Peripherals.Memory
 
         public byte ReadByte(long offset)
         {
-            this.Log(LogLevel.Info, $"Read offset: {offset}");
-
             /*if (offset < 0 || offset >= Size)
                 throw new ArgumentOutOfRangeException(nameof(offset));
             return memory[offset];*/
@@ -51,31 +49,36 @@ namespace Antmicro.Renode.Peripherals.Memory
             writer.Write(offset);
             writer.Flush();
 
-            return reader.ReadByte();
+            var result = reader.ReadByte();
+            this.Log(LogLevel.Info, $"Read byte offset: {offset} -> {result}");
+
+            return result;
         }
 
         public ushort ReadWord(long offset)
         {
-            this.Log(LogLevel.Info, $"Read word offset: {offset}");
-
             /*return BitConverter.ToUInt16(memory, (int)offset);*/
             writer.Write((byte)1);
             writer.Write(offset);
             writer.Flush();
+            
+            var result = reader.ReadUInt16();
+            this.Log(LogLevel.Info, $"Read word offset: {offset} -> {result}");
 
-            return reader.ReadUInt16();
+            return result;
         }
 
         public uint ReadDoubleWord(long offset)
         {
-            this.Log(LogLevel.Info, $"Read dword offset: {offset}");
-
             /*return BitConverter.ToUInt32(memory, (int)offset);*/
             writer.Write((byte)2);
             writer.Write(offset);
             writer.Flush();
 
-            return reader.ReadUInt32();
+            var result = reader.ReadUInt32();
+            this.Log(LogLevel.Info, $"Read dword offset: {offset} -> {result}");
+
+            return result;
         }
 
         public void WriteByte(long offset, byte value)

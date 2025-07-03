@@ -6,5 +6,7 @@
 #define E_INSUFFICIENT 2
 #define E_INVALID 3
 #define E_SINGULAR 4
+#define E_NOTREADY 5
+#define E_BUSY 6
 
 #endif
