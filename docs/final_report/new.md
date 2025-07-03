@@ -1,12 +1,78 @@
 # LightRT from hezhiying
 
-<p style = "color:red;"> 
+<p style = "color:red;">
     声明： 我们的板子与所有构思内容，均是在本课程期间开始构思并最终完成，如果有疑问，可以查询github上面的会议记录，有完整录音和文字记录。https://git.lug.ustc.edu.cn/hzyosh/lightrt或者进行任何代码查重
 </p>
-
 ## 目录
 
-[TOC]
+- [LightRT from hezhiying](#lightrt-from-hezhiying)
+  - [目录](#目录)
+  - [项目背景](#项目背景)
+  - [小组成员及分工](#小组成员及分工)
+  - [项目总览](#项目总览)
+    - [系统架构设计](#系统架构设计)
+      - [可扩展性](#可扩展性)
+      - [高性能](#高性能)
+      - [易移植性](#易移植性)
+    - [技术路线](#技术路线)
+  - [架构介绍](#架构介绍)
+    - [代码构成](#代码构成)
+    - [用户态与内核态](#用户态与内核态)
+    - [系统调用](#系统调用)
+    - [进程管理](#进程管理)
+  - [具体分模块介绍](#具体分模块介绍)
+    - [内核服务层](#内核服务层)
+    - [硬件抽象层（HAL）](#硬件抽象层hal)
+      - [上下文切换模块](#上下文切换模块)
+      - [CPU 端口模块](#cpu-端口模块)
+      - [中断管理模块](#中断管理模块)
+      - [异常处理模块](#异常处理模块)
+    - [进程调度层](#进程调度层)
+    - [内存管理](#内存管理)
+    - [线程通信层](#线程通信层)
+    - [时钟控制层](#时钟控制层)
+    - [通信层](#通信层)
+    - [应用层](#应用层)
+  - [创新技术实现](#创新技术实现)
+    - [1. 基于 STM32 的 Renode 开发环境搭建](#1-基于-stm32-的-renode-开发环境搭建)
+    - [2. 任务调度机制](#2-任务调度机制)
+    - [3. 共享内存优化](#3-共享内存优化)
+    - [4. 多语言协作开发](#4-多语言协作开发)
+    - [5. 系统调用、中断与异常处理](#5-系统调用中断与异常处理)
+    - [6. 模块化驱动设计](#6-模块化驱动设计)
+  - [验证](#验证)
+  - [遇到的困难与解决方案](#遇到的困难与解决方案)
+    - [uart不能触发](#uart不能触发)
+    - [dma不能通过原始的renode验证](#dma不能通过原始的renode验证)
+  - [代码行数统计](#代码行数统计)
+  - [项目未来可拓展方向](#项目未来可拓展方向)
+  - [一、内核功能拓展](#一内核功能拓展)
+    - [1. 动态内存管理](#1-动态内存管理)
+    - [2. 高级调度算法](#2-高级调度算法)
+    - [3. 中断嵌套与异步通知机制](#3-中断嵌套与异步通知机制)
+  - [二、网络与通信能力拓展](#二网络与通信能力拓展)
+    - [1. 网络协议栈集成](#1-网络协议栈集成)
+    - [2. 多节点协同与分布式任务调度](#2-多节点协同与分布式任务调度)
+  - [三、文件系统与持久化支持](#三文件系统与持久化支持)
+    - [1. 轻量级文件系统](#1-轻量级文件系统)
+    - [2. 虚拟文件系统接口（VFS）](#2-虚拟文件系统接口vfs)
+  - [四、硬件抽象层（HAL）增强](#四硬件抽象层hal增强)
+    - [1. 更多外设驱动支持](#1-更多外设驱动支持)
+    - [2. 跨平台适配](#2-跨平台适配)
+  - [五、安全与可靠性提升](#五安全与可靠性提升)
+    - [1. 运行时检测与错误恢复机制](#1-运行时检测与错误恢复机制)
+    - [2. 用户空间隔离与权限控制](#2-用户空间隔离与权限控制)
+  - [总结](#总结)
+    - [项目总结](#项目总结)
+    - [开发过程的感悟](#开发过程的感悟)
+      - [团队协作](#团队协作)
+      - [技术挑战与学习](#技术挑战与学习)
+      - [设计决策](#设计决策)
+  - [回顾中期报告](#回顾中期报告)
+    - [中期目标](#中期目标)
+    - [已完成部分及其实现](#已完成部分及其实现)
+    - [未完成部分及其原因](#未完成部分及其原因)
+  - [参考文档](#参考文档)
 
 ## 项目背景
 
@@ -96,11 +162,9 @@ LightRT 采用多语言开发和开源工具链，技术栈如下：
   
   ![7e06900c481c77895e13bc6bd6f5f0a](./pic/1.png)
   
-  
-  
   - main() – C system entry
   
-  ​	   Called by **reset handler** in **hardware library** (libopencm3).
+  ​    Called by **reset handler** in **hardware library** (libopencm3).
   
   - Initialize peripherals
   
@@ -119,8 +183,6 @@ LightRT 采用多语言开发和开源工具链，技术栈如下：
   ![058c84b3064f168f5479b6c680ad530](./pic/2.png)
   
   ![bea576b306b8d54f7adc5d93053a00d](./pic/3.png)
-  
-  
   
   ### 系统调用
   
@@ -363,8 +425,6 @@ void *mem_alloc(memctx *ctx, int size)
 
 ### dma不能通过原始的renode验证
 
-
-
 ## 代码行数统计
 
 | 语言/模块 | 主要文件（示例）                                   | 行数估算   |
@@ -500,32 +560,28 @@ LightRT 的开发让我们深刻认识到团队协作的重要性。我们小组
 
 ## 参考文档
 
-- **STM32F103x8/B Reference Manual (RM0008)** , STMicroelectronics
-  https://www.st.com/resource/en/reference_manual/rm0008-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
-- **ARM Cortex-M3 Technical Reference Manual** , ARM Limited
-  https://developer.arm.com/documentation/100165/0201/
-- **libopencm3 User Manual and API Reference** , libopencm3 Community
-  http://libopencm3.org/docs/latest/html/
-- **FreeRTOS Reference Manual: Real-Time Kernel for Embedded Systems** , Richard Barry
-  https://www.freertos.org/Documentation/RTOS_documentation.html
-- **MicroC/OS-II: The Real-Time Kernel** , Jean J. Labrosse
-  https://www.micrium.com/rtos/kernels/
-- **Renode User Manual** , Antmicro
-  https://renode.readthedocs.io/en/latest/
-- **Docker Documentation** , Docker, Inc.
-  https://docs.docker.com/
-- **Embedded Systems Programming with ARM Cortex-M Microcontrollers** , Joseph Yiu
-  https://www.elsevier.com/books/the-definitive-guide-to-arm-cortex-m3-and-cortex-m4-processors/yiu/978-0-12-408082-9
-- **Pro Git** , Scott Chacon and Ben Straub
-  https://git-scm.com/book/en/v2
-- **A Survey of Real-Time Operating Systems for Embedded Systems** , Various (IEEE)
-  https://ieeexplore.ieee.org/
-- **AN2548 - Using the STM32F0/F1/F2/F4/Lx Series DMA Controller** , STMicroelectronics
-  https://www.st.com/resource/en/application_note/an2548-using-the-stm32f0f1f2f4lx-series-dma-controller-stmicroelectronics.pdf
-- **STM32 Community and Embedded Systems Forums**
-  - [ST Community](https://community.st.com/)
-  - [Stack Overflow - Embedded Tag](https://stackoverflow.com/questions/tagged/embedded)
-  - [Reddit r/embedded](https://www.reddit.com/r/embedded/)
-- **LightRT Source Code and Meeting Records**
-  - [USTC LUG GitLab](https://git.lug.ustc.edu.cn/hzyosh/lightrt)
-  - [GitHub Repository](https://github.com/OSH-2025/hezhiying)
+- STM32F103x8/B Reference Manual (RM0008), STMicroelectronics, [STM32F103x8/B Reference Manual](https://www.st.com/resource/en/reference_manual/rm0008-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
+  
+  ARM Cortex-M3 Technical Reference Manual, ARM Limited, [ARM Cortex-M3 Technical Reference Manual](https://developer.arm.com/documentation/100165/0201/)
+  
+  libopencm3 User Manual and API Reference, libopencm3 Community, [libopencm3 User Manual and API Reference](http://libopencm3.org/docs/latest/html/)
+  
+  FreeRTOS Reference Manual: Real-Time Kernel for Embedded Systems, Richard Barry, [FreeRTOS Reference Manual](https://www.freertos.org/Documentation/RTOS_documentation.html)
+  
+  MicroC/OS-II: The Real-Time Kernel, Jean J. Labrosse, [MicroC/OS-II Documentation](https://www.micrium.com/rtos/kernels/)
+  
+  Renode User Manual, Antmicro, [Renode User Manual](https://renode.readthedocs.io/en/latest/)
+  
+  Docker Documentation, Docker, Inc., [Docker Documentation](https://docs.docker.com/)
+  
+  Embedded Systems Programming with ARM Cortex-M Microcontrollers, Joseph Yiu, [The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors](https://www.elsevier.com/books/the-definitive-guide-to-arm-cortex-m3-and-cortex-m4-processors/yiu/978-0-12-408082-9)
+  
+  Pro Git, Scott Chacon and Ben Straub, [Pro Git Book](https://git-scm.com/book/en/v2)
+  
+  A Survey of Real-Time Operating Systems for Embedded Systems, Various (IEEE), [IEEE Xplore](https://ieeexplore.ieee.org/)
+  
+  AN2548 - Using the STM32F0/F1/F2/F4/Lx Series DMA Controller, STMicroelectronics, [AN2548 DMA Controller Application Note](https://www.st.com/resource/en/application_note/an2548-using-the-stm32f0f1f2f4lx-series-dma-controller-stmicroelectronics.pdf)
+  
+  STM32 Community and Embedded Systems Forums, [ST Community](https://community.st.com/), [Stack Overflow](https://stackoverflow.com/questions/tagged/embedded), [Reddit r/embedded](https://www.reddit.com/r/embedded/)
+  
+  LightRT Source Code and Meeting Records, [USTC LUG GitLab](https://git.lug.ustc.edu.cn/hzyosh/lightrt), [GitHub Repository](https://github.com/OSH-2025/hezhiying)
